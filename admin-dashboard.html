@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ashhaz Admin Dashboard</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f5f1;font-family:Arial,sans-serif;color:#20392f}
+header{background:#173f32;color:white;padding:20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+main{max-width:1100px;margin:auto;padding:22px}
+.panel{background:white;padding:20px;margin-bottom:20px;border-radius:10px;border:1px solid #e0e5df}
+form{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+label{font-size:14px;font-weight:bold}
+input,textarea{display:block;width:100%;padding:10px;margin-top:6px;border:1px solid #bbc7be;border-radius:5px;font:inherit}
+textarea{min-height:70px}
+button{padding:11px 15px;border:0;border-radius:5px;background:#173f32;color:white;cursor:pointer}
+button.secondary{background:#66736b}
+button.danger{background:#a32d2d}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.status{overflow-wrap:anywhere}
+table{width:100%;border-collapse:collapse;min-width:700px}
+th,td{padding:11px;border-bottom:1px solid #e3e7e3;text-align:left}
+.tablewrap{overflow-x:auto}
+#products img{width:55px;height:55px;object-fit:cover}
+.small{font-size:13px;color:#59665e}
+</style>
+</head>
+<body>
+<header>
+  <div><strong>Ashhaz International Inc</strong><div>Admin Dashboard</div></div>
+  <button id="logout" class="secondary">Logout</button>
+</header>
+<main>
+  <section class="panel">
+    <h2 id="formTitle">Add Product</h2>
+    <p class="small">Price and stock are entered as numbers. Image URL should be a publicly accessible image link.</p>
+    <form id="productForm">
+      <label>SKU<input name="sku" maxlength="100" required></label>
+      <label>Product Name<input name="name" maxlength="200" required></label>
+      <label>Price (₹)<input name="price" type="number" min="0" step="0.01" required></label>
+      <label>Stock Quantity<input name="stock" type="number" min="0" step="1" required></label>
+      <label>Category<input name="category" maxlength="100"></label>
+      <label>Image URL<input name="image_url" type="url" maxlength="1000"></label>
+      <label style="grid-column:1/-1">Description<textarea name="description" maxlength="3000"></textarea></label>
+      <div class="actions" style="grid-column:1/-1">
+        <button type="submit" id="saveBtn">Save Product</button>
+        <button type="button" id="cancelEdit" class="secondary" hidden>Cancel Edit</button>
+      </div>
+    </form>
+    <p id="formMessage" class="status" role="status"></p>
+  </section>
+
+  <section class="panel">
+    <h2>Products</h2>
+    <button id="refresh" class="secondary">Refresh Products</button>
+    <p id="listMessage" class="status" role="status">Loading products...</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Image</th><th>SKU</th><th>Name</th><th>Price</th><th>Stock</th><th>Actions</th></tr></thead>
+        <tbody id="products"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+<script>
+const form=document.getElementById("productForm");
+const tbody=document.getElementById("products");
+const formMessage=document.getElementById("formMessage");
+const listMessage=document.getElementById("listMessage");
+let items=[];
+let editingId=null;
+
+function safeText(value){
+  return String(value??"");
+}
+function showMessage(el,text){el.textContent=text;}
+function clearEdit(){
+  editingId=null;
+  form.reset();
+  document.getElementById("formTitle").textContent="Add Product";
+  document.getElementById("saveBtn").textContent="Save Product";
+  document.getElementById("cancelEdit").hidden=true;
+}
+async function api(url,options={}){
+  const response=await fetch(url,{
+    credentials:"same-origin",
+    ...options,
+    headers:{"Content-Type":"application/json",...(options.headers||{})}
+  });
+  const data=await response.json().catch(()=>({error:"Invalid server response"}));
+  if(response.status===401){
+    throw new Error("Admin session nahi mili. Dobara login karein.");
+  }
+  if(!response.ok) throw new Error(data.error||"Request failed");
+  return data;
+}
+async function loadProducts(){
+  showMessage(listMessage,"Loading products...");
+  tbody.replaceChildren();
+  try{
+    const data=await api("/api/products");
+    items=Array.isArray(data.products)?data.products:[];
+    showMessage(listMessage,items.length+" product(s) found.");
+    for(const p of items){
+      const tr=document.createElement("tr");
+      const imgCell=document.createElement("td");
+      if(p.image_url){
+        const img=document.createElement("img");
+        img.src=p.image_url;
+        img.alt="";
+        img.onerror=()=>img.remove();
+        imgCell.append(img);
+      }
+      tr.append(imgCell);
+      for(const value of [p.sku,p.name,"₹"+Number(p.price||0).toFixed(2),p.stock]){
+        const td=document.createElement("td");
+        td.textContent=safeText(value);
+        tr.append(td);
+      }
+      const actionCell=document.createElement("td");
+      const edit=document.createElement("button");
+      edit.textContent="Edit";
+      edit.type="button";
+      edit.onclick=()=>startEdit(p);
+      actionCell.append(edit);
+      const del=document.createElement("button");
+      del.textContent="Delete";
+      del.type="button";
+      del.className="danger";
+      del.style.marginLeft="6px";
+      del.onclick=()=>deleteProduct(p);
+      actionCell.append(del);
+      tr.append(actionCell);
+      tbody.append(tr);
+    }
+  }catch(error){
+    showMessage(listMessage,error.message);
+  }
+}
+function startEdit(p){
+  editingId=p.id;
+  for(const key of ["sku","name","price","stock","category","image_url","description"]){
+    form.elements[key].value=p[key]??"";
+  }
+  document.getElementById("formTitle").textContent="Edit Product";
+  document.getElementById("saveBtn").textContent="Update Product";
+  document.getElementById("cancelEdit").hidden=false;
+  showMessage(formMessage,"Editing: "+safeText(p.name));
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+form.addEventListener("submit",async event=>{
+  event.preventDefault();
+  const fd=new FormData(form);
+  const payload=Object.fromEntries(fd.entries());
+  payload.price=Number(payload.price);
+  payload.stock=Number(payload.stock);
+  const url=editingId===null?"/api/products":"/api/products?id="+encodeURIComponent(editingId);
+  const method=editingId===null?"POST":"PUT";
+  const btn=document.getElementById("saveBtn");
+  btn.disabled=true;
+  try{
+    await api(url,{method,body:JSON.stringify(payload)});
+    showMessage(formMessage,editingId===null?"Product saved.":"Product updated.");
+    clearEdit();
+    await loadProducts();
+  }catch(error){
+    showMessage(formMessage,error.message);
+  }finally{btn.disabled=false;}
+});
+async function deleteProduct(p){
+  if(!confirm("Delete product '"+safeText(p.name)+"'?"))return;
+  try{
+    await api("/api/products?id="+encodeURIComponent(p.id),{method:"DELETE"});
+    showMessage(formMessage,"Product deleted.");
+    await loadProducts();
+  }catch(error){showMessage(formMessage,error.message);}
+}
+document.getElementById("cancelEdit").addEventListener("click",clearEdit);
+document.getElementById("refresh").addEventListener("click",loadProducts);
+document.getElementById("logout").addEventListener("click",async()=>{
+  try{await api("/api/logout",{method:"POST"});}catch(error){}
+  location.href="/admin.html";
+});
+loadProducts();
+</script>
+</body>
+</html>
