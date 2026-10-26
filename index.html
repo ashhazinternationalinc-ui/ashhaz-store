@@ -4,469 +4,347 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ashhaz International Inc | Home Decor & Gardening</title>
-  <meta name="description" content="Explore home decor, gardening planters, fruit baskets, candle holders and furniture from Ashhaz International Inc.">
+
+  <title>Ashhaz International Inc | Premium Home Decor & Gardening</title>
+
+  <meta name="description" content="Discover premium home decor, jute planters, iron fruit baskets, candle holders, diyas and furniture from Ashhaz International Inc, Moradabad, India.">
+
+  <meta name="theme-color" content="#242930">
+
   <style>
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: Arial, sans-serif; color: #26332c; background: #faf9f5; }
-    header { background: #173f32; color: white; padding: 20px 6%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-    header h1 { margin: 0; font-size: 24px; }
-    nav a { color: white; text-decoration: none; margin-left: 18px; }
-    .hero { padding: 75px 8%; text-align: center; background: #e9efe5; }
-    .hero h2 { font-size: clamp(30px, 5vw, 48px); margin: 0 0 16px; }
-    .hero p { font-size: 18px; line-height: 1.7; }
-    .button { display: inline-block; background: #b47737; color: white; padding: 13px 24px; border-radius: 5px; text-decoration: none; margin-top: 15px; }
-    main { max-width: 1100px; margin: auto; padding: 40px 20px; }
-    .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
-    .product { background: white; padding: 25px; border-radius: 10px; border: 1px solid #e7e4dc; }
-    .product h3 { color: #173f32; }
-    footer { background: #173f32; color: white; text-align: center; padding: 25px; }
-    /* ASHHAZ PREMIUM BRAND DESIGN */
-body {
-  background: #F7F4EF;
-  color: #292D32;
-  font-family: Arial, sans-serif;
-}
+    :root {
+      --charcoal: #242930;
+      --charcoal-light: #343a42;
+      --gold: #b99a62;
+      --cream: #f7f3ec;
+      --text: #292d32;
+      --muted: #62666c;
+      --border: #e5dccd;
+      --white: #ffffff;
+    }
 
-header {
-  background: linear-gradient(135deg, #20252B, #343A42);
-  color: #FFFFFF;
-  border-bottom: 4px solid #B99A62;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.15);
-}
+    * {
+      box-sizing: border-box;
+    }
 
-header h1 {
-  color: #FFFFFF;
-  letter-spacing: 1px;
-}
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 25px;
+    }
 
-nav a {
-  color: #FFFFFF;
-  font-weight: 600;
-  transition: color 0.2s ease;
-}
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
 
-nav a:hover {
-  color: #D5B578;
-}
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
 
-.hero {
-  background: linear-gradient(135deg, #F7F4EF, #EAE4D9);
-  padding: 85px 8%;
-  border-bottom: 1px solid #E0D5C3;
-}
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      min-height: 100px;
+      padding: 14px 6%;
+      background: linear-gradient(
+        135deg,
+        var(--charcoal),
+        var(--charcoal-light)
+      );
+      border-bottom: 3px solid var(--gold);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+    }
 
-.hero h2 {
-  color: #292D32;
-  line-height: 1.2;
-}
-
-.hero p {
-  color: #5D6268;
-}
-
-.button {
-  background: #C52D32;
-  color: #FFFFFF;
-  border-radius: 6px;
-  box-shadow: 0 4px 10px rgba(197,45,50,0.18);
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.button:hover {
-  background: #A51F25;
-  transform: translateY(-2px);
-}
-
-main {
-  max-width: 1200px;
-  margin: auto;
-  padding: 40px 20px;
-}
-
-.products {
-  gap: 24px;
-}
-
-.product {
-  background: #FFFFFF;
-  border: 1px solid #E7DED1;
-  border-radius: 12px;
-  box-shadow: 0 5px 20px rgba(41,45,50,0.06);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.product:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 26px rgba(41,45,50,0.12);
-}
-
-.product h3 {
-  color: #292D32;
-}
-
-#contact {
-  background: #EEE8DE;
-  border-radius: 12px;
-  padding: 28px;
-  margin-top: 35px;
-}
-
-footer {
-  background: #20252B;
-  color: #FFFFFF;
-  text-align: center;
-  padding: 30px;
-  border-top: 4px solid #B99A62;
-}
-
-@media (max-width: 600px) {
-  header {
-    padding: 18px 5%;
-  }
-
-  .hero {
-    padding: 55px 6%;
-  }
-
-  main {
-    padding: 25px 14px;
-  }
-
-  .products {
-    grid-template-columns: 1fr;
-  }
-}
     .brand-logo {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-}
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+    }
 
-.brand-logo img {
-  height: 65px;
-  width: auto;
-  max-width: 180px;
-  object-fit: contain;
-  display: block;
-}
+    .brand-logo img {
+      display: block;
+      width: auto;
+      height: 75px;
+      max-width: 190px;
+      object-fit: contain;
+      transition: transform 0.25s ease;
+    }
 
-@media (max-width: 600px) {
-  .brand-logo img {
-    height: 48px;
-    max-width: 130px;
-  }
-}
-/* Header and logo layout */
-header {
-  min-height: 95px;
-  padding: 14px 6%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 24px;
-}
+    .brand-logo:hover img {
+      transform: scale(1.03);
+    }
 
-.brand-logo img {
-  height: 75px;
-  width: auto;
-  max-width: 190px;
-  object-fit: contain;
-  display: block;
-}
+    header nav {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
 
-header nav {
-  display: flex;
-  align-items: center;
-  gap: 26px;
-}
+    header nav a {
+      color: var(--white);
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
 
-header nav a {
-  margin-left: 0;
-}
+    header nav a:hover {
+      color: #e5ca91;
+    }
 
-/* Make homepage more compact */
-.hero {
-  padding: 55px 6%;
-}
+    .hero {
+      padding: 90px 8%;
+      text-align: center;
+      background:
+        radial-gradient(
+          circle at 50% 0%,
+          rgba(185, 154, 98, 0.18),
+          transparent 55%
+        ),
+        linear-gradient(135deg, #fbf8f2, #e9e0d1);
+      border-bottom: 1px solid #dfd1b9;
+    }
 
-.hero h2 {
-  font-size: clamp(30px, 4vw, 48px);
-  margin: 0 0 16px;
-}
+    .hero h2 {
+      max-width: 950px;
+      margin: 0 auto 18px;
+      color: var(--charcoal);
+      font-size: clamp(32px, 4.5vw, 52px);
+      line-height: 1.18;
+      letter-spacing: -0.7px;
+    }
 
-.hero p {
-  font-size: 18px;
-  line-height: 1.6;
-}
+    .hero p {
+      max-width: 700px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.8;
+    }
 
-main {
-  max-width: 1200px;
-  margin: auto;
-  padding: 30px 24px;
-}
+    .button {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 14px 28px;
+      background: var(--charcoal);
+      color: var(--white);
+      border: 1px solid var(--gold);
+      border-radius: 6px;
+      box-shadow: 0 5px 14px rgba(36, 41, 48, 0.16);
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
 
-@media (max-width: 600px) {
-  header {
-    padding: 12px 18px;
-    flex-wrap: wrap;
-  }
+    .button:hover {
+      background: var(--gold);
+      color: var(--charcoal);
+      transform: translateY(-2px);
+    }
 
-  .brand-logo img {
-    height: 55px;
-    max-width: 140px;
-  }
+    main {
+      max-width: 1250px;
+      margin: 0 auto;
+      padding: 42px 24px;
+    }
 
-  header nav {
-    gap: 14px;
-    flex-wrap: wrap;
-  }
+    .section-heading {
+      margin: 0 0 24px;
+      color: var(--charcoal);
+      font-size: 28px;
+    }
 
-  .hero {
-    padding: 42px 18px;
-  }
-}
+    #products,
+    #live-products {
+      scroll-margin-top: 24px;
+    }
 
+    .products {
+      display: grid;
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(220px, 1fr)
+      );
+      gap: 24px;
+    }
+
+    .product {
+      min-width: 0;
+      overflow: hidden;
+      padding: 24px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(41, 45, 50, 0.05);
+      transition: transform 0.25s ease,
+                  box-shadow 0.25s ease;
+    }
+
+    .product:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px rgba(41, 45, 50, 0.11);
+    }
+
+    .product h3 {
+      margin: 12px 0 8px;
+      color: var(--charcoal);
+      line-height: 1.4;
+      overflow-wrap: anywhere;
+    }
+
+    .product p {
+      color: var(--muted);
+    }
+
+    .product-image {
+      display: block;
+      width: 100%;
+      height: 230px;
+      object-fit: contain;
+      margin: 0 auto 12px;
+      border-radius: 8px;
+    }
+
+    .product-price {
+      color: var(--charcoal) !important;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .product-stock {
+      font-size: 14px;
+    }
+
+    #live-products {
+      margin-top: 42px;
+    }
+
+    .status-message {
+      padding: 20px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--muted);
+    }
+
+    #contact {
+      margin-top: 42px;
+      padding: 30px;
+      background: linear-gradient(135deg, #eee7db, #f9f5ee);
+      border: 1px solid #dfd1b9;
+      border-radius: 12px;
+      scroll-margin-top: 24px;
+    }
+
+    #contact h2 {
+      margin-top: 0;
+      color: var(--charcoal);
+    }
+
+    #contact p {
+      margin-bottom: 8px;
+    }
+
+    footer {
+      padding: 28px 18px;
+      background: linear-gradient(
+        135deg,
+        var(--charcoal),
+        var(--charcoal-light)
+      );
+      color: var(--white);
+      text-align: center;
+      border-top: 3px solid var(--gold);
+    }
+
+    footer p {
+      margin: 5px 0;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        justify-content: center;
+        padding: 14px 18px;
+        gap: 14px;
+      }
+
+      .brand-logo img {
+        height: 58px;
+        max-width: 150px;
+      }
+
+      header nav {
+        justify-content: center;
+        gap: 12px 18px;
+      }
+
+      header nav a {
+        font-size: 14px;
+      }
+
+      .hero {
+        padding: 58px 20px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      main {
+        padding: 28px 16px;
+      }
+
+      .section-heading {
+        font-size: 24px;
+      }
+
+      .products {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .product {
+        padding: 20px;
+      }
+
+      #contact {
+        padding: 22px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition: none !important;
+      }
+    }
   </style>
 </head>
-/* ASHHAZ PREMIUM CHARCOAL-GOLD THEME */
-
-:root {
-  --charcoal: #242930;
-  --charcoal-light: #343a42;
-  --gold: #b99a62;
-  --cream: #f7f3ec;
-  --text: #292d32;
-}
-
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 25px;
-}
-
-body {
-  background: var(--cream);
-  color: var(--text);
-  font-family: Arial, sans-serif;
-  line-height: 1.6;
-}
-
-header {
-  position: relative;
-  background: linear-gradient(
-    135deg,
-    var(--charcoal),
-    var(--charcoal-light)
-  );
-  border-bottom: 3px solid var(--gold);
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-  padding: 14px 6%;
-  min-height: 100px;
-}
-
-.brand-logo img {
-  height: 78px;
-  max-width: 190px;
-  width: auto;
-  object-fit: contain;
-  transition: transform 0.25s ease;
-}
-
-.brand-logo:hover img {
-  transform: scale(1.04);
-}
-
-header nav {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 24px;
-}
-
-header nav a {
-  margin: 0;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-header nav a:hover {
-  color: #e5ca91;
-}
-
-.hero {
-  position: relative;
-  padding: 95px 8%;
-  text-align: center;
-  background:
-    radial-gradient(
-      circle at 50% 0%,
-      rgba(185, 154, 98, 0.18),
-      transparent 55%
-    ),
-    linear-gradient(135deg, #fbf8f2, #e9e0d1);
-  border-bottom: 1px solid #dfd1b9;
-}
-
-.hero h2 {
-  max-width: 950px;
-  margin: 0 auto 18px;
-  color: var(--charcoal);
-  font-size: clamp(30px, 4.5vw, 52px);
-  line-height: 1.18;
-  letter-spacing: -0.7px;
-}
-
-.hero p {
-  max-width: 700px;
-  margin: 0 auto;
-  color: #5d6268;
-  font-size: 18px;
-  line-height: 1.8;
-}
-
-.button {
-  display: inline-block;
-  margin-top: 24px;
-  padding: 14px 28px;
-  background: var(--charcoal);
-  color: #fff;
-  border: 1px solid var(--gold);
-  border-radius: 6px;
-  box-shadow: 0 5px 14px rgba(36, 41, 48, 0.16);
-  font-weight: 700;
-  text-decoration: none;
-  transition: all 0.25s ease;
-}
-
-.button:hover {
-  background: var(--gold);
-  color: #20252b;
-  transform: translateY(-2px);
-}
-
-main {
-  max-width: 1250px;
-  margin: auto;
-  padding: 45px 24px;
-}
-
-main h2 {
-  color: var(--charcoal);
-  margin-bottom: 22px;
-}
-
-.products {
-  display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(220px, 1fr)
-  );
-  gap: 24px;
-}
-
-.product {
-  overflow: hidden;
-  background: #fff;
-  padding: 24px;
-  border: 1px solid #e5dccd;
-  border-radius: 12px;
-  box-shadow: 0 5px 20px rgba(41, 45, 50, 0.05);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.product:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 28px rgba(41, 45, 50, 0.12);
-}
-
-.product h3 {
-  color: var(--charcoal);
-  line-height: 1.35;
-}
-
-#live-products .product img {
-  display: block;
-  width: 100%;
-  height: 230px;
-  object-fit: contain;
-  margin: 0 auto 16px;
-  border-radius: 8px;
-}
-
-#contact {
-  margin-top: 40px;
-  padding: 30px;
-  background: linear-gradient(135deg, #eee7db, #f9f5ee);
-  border: 1px solid #dfd1b9;
-  border-radius: 12px;
-}
-
-footer {
-  background: linear-gradient(
-    135deg,
-    var(--charcoal),
-    var(--charcoal-light)
-  );
-  color: #fff;
-  text-align: center;
-  padding: 28px 18px;
-  border-top: 3px solid var(--gold);
-}
-
-@media (max-width: 600px) {
-  header {
-    padding: 14px 18px;
-    gap: 14px;
-  }
-
-  .brand-logo img {
-    height: 58px;
-    max-width: 145px;
-  }
-
-  header nav {
-    gap: 12px 18px;
-  }
-
-  header nav a {
-    font-size: 14px;
-  }
-
-  .hero {
-    padding: 58px 20px;
-  }
-
-  .hero p {
-    font-size: 16px;
-  }
-
-  main {
-    padding: 28px 16px;
-  }
-
-  .products {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
-
-  .product {
-    padding: 20px;
-  }
-
-  #contact {
-    padding: 22px;
-  }
-}
 
 <body>
   <header>
-   <a href="/" class="brand-logo">
-  <img src="/logo.png" alt="Ashhaz International Inc Logo">
-</a>
-    <nav>
+    <a href="/#home"
+       class="brand-logo"
+       aria-label="Ashhaz International Inc Home">
+      <img
+        src="/logo.png"
+        alt="Ashhaz International Inc Logo"
+      >
+    </a>
+
+    <nav aria-label="Main navigation">
       <a href="#home">Home</a>
       <a href="#products">Products</a>
       <a href="#contact">Contact</a>
@@ -475,73 +353,59 @@ footer {
   </header>
 
   <section class="hero" id="home">
-    <h2>Beautiful Products for Your Home & Garden</h2>
-    <p>Discover home decor, planters, iron baskets and handcrafted designs.</p>
+    <h2>Beautiful Products for Your Home &amp; Garden</h2>
+
+    <p>
+      Discover premium home decor, jute planters, iron baskets
+      and handcrafted designs for your home and garden.
+    </p>
+
     <a class="button" href="#products">Explore Products</a>
   </section>
 
   <main>
     <section id="products">
-      <h2>Our Product Categories</h2>
+      <h2 class="section-heading">Our Product Categories</h2>
+
       <div class="products">
         <article class="product">
           <h3>Jute Planters</h3>
-          <p>Decorative planters for your home, balcony and garden.</p>
+          <p>
+            Decorative planters for your home, balcony and garden.
+          </p>
         </article>
+
         <article class="product">
           <h3>Fruit Baskets</h3>
-          <p>Stylish iron baskets for everyday use and gifting.</p>
+          <p>
+            Stylish iron baskets for everyday use and gifting.
+          </p>
         </article>
+
         <article class="product">
-          <h3>Candle Holders & Diyas</h3>
-          <p>Decorative lighting pieces for festive occasions.</p>
+          <h3>Candle Holders &amp; Diyas</h3>
+          <p>
+            Decorative lighting pieces for festive occasions.
+          </p>
         </article>
+
         <article class="product">
-          <h3>Home Decor & Furniture</h3>
-          <p>Explore designs to complement your living space.</p>
+          <h3>Home Decor &amp; Furniture</h3>
+          <p>
+            Beautiful designs to complement your living space.
+          </p>
         </article>
       </div>
     </section>
-<section id="live-products">
-  <h2>Our Products</h2>
-  <div id="live-product-list" class="products">
-    Loading products...
-  </div>
-</section>
 
-<script>
-async function loadLiveProducts() {
-  const box = document.getElementById("live-product-list");
+    <section id="live-products">
+      <h2 class="section-heading">Our Products</h2>
 
-  try {
-    const response = await fetch("/api/products");
-    if (!response.ok) throw new Error("Products load failed");
+      <div id="live-product-list" class="products">
+        <p class="status-message">Loading products...</p>
+      </div>
+    </section>
 
-    const data = await response.json();
-    const products = data.products || [];
-
-    if (!products.length) {
-      box.textContent = "Products coming soon.";
-      return;
-    }
-
-    box.innerHTML = products.map(p => `
-      <article class="product">
-        <img src="${p.image_url || "https://placehold.co/300x300"}"
-             alt="${p.name || "Product"}"
-             style="width:100%;height:200px;object-fit:contain">
-        <h3>${p.name || ""}</h3>
-        <p>₹${Number(p.price || 0).toFixed(2)}</p>
-        <p>Stock: ${Number(p.stock || 0)}</p>
-      </article>
-    `).join("");
-  } catch (error) {
-    box.textContent = "Products could not be loaded. Please refresh.";
-  }
-}
-
-loadLiveProducts();
-</script>
     <section id="contact">
       <h2>Contact Us</h2>
       <p><strong>Ashhaz International Inc</strong></p>
@@ -550,7 +414,93 @@ loadLiveProducts();
   </main>
 
   <footer>
-    <p>&copy; 2026 Ashhaz International Inc. All rights reserved.</p>
+    <p>&copy; 2026 Ashhaz International Inc.</p>
+    <p>All rights reserved.</p>
   </footer>
+
+  <script>
+    async function loadLiveProducts() {
+      const box = document.getElementById("live-product-list");
+
+      try {
+        const response = await fetch("/api/products");
+
+        if (!response.ok) {
+          throw new Error("Products could not be loaded");
+        }
+
+        const data = await response.json();
+        const products = Array.isArray(data.products)
+          ? data.products
+          : [];
+
+        box.replaceChildren();
+
+        if (products.length === 0) {
+          const message = document.createElement("p");
+          message.className = "status-message";
+          message.textContent = "Products coming soon.";
+          box.appendChild(message);
+          return;
+        }
+
+        products.forEach(function (product) {
+          const card = document.createElement("article");
+          card.className = "product";
+
+          const img = document.createElement("img");
+          img.className = "product-image";
+          img.alt = product.name || "Ashhaz product";
+          img.loading = "lazy";
+
+          const imageUrl = product.image_url || "";
+
+          if (/^https?:\/\//i.test(imageUrl) ||
+              imageUrl.startsWith("/")) {
+            img.src = imageUrl;
+          } else {
+            img.src = "https://placehold.co/400x400?text=Ashhaz";
+          }
+
+          img.onerror = function () {
+            img.onerror = null;
+            img.src = "https://placehold.co/400x400?text=Ashhaz";
+          };
+
+          const name = document.createElement("h3");
+          name.textContent = product.name || "Product";
+
+          const price = document.createElement("p");
+          price.className = "product-price";
+
+          const amount = Number(product.price);
+          price.textContent = "₹" +
+            (Number.isFinite(amount) ? amount : 0).toFixed(2);
+
+          const stock = document.createElement("p");
+          stock.className = "product-stock";
+
+          const quantity = Number(product.stock);
+          stock.textContent = "Stock: " +
+            (Number.isFinite(quantity) ? quantity : 0);
+
+          card.append(img, name, price, stock);
+          box.appendChild(card);
+        });
+      } catch (error) {
+        box.replaceChildren();
+
+        const message = document.createElement("p");
+        message.className = "status-message";
+        message.textContent =
+          "Products could not be loaded. Please try again later.";
+
+        box.appendChild(message);
+        console.error("Product loading error:", error);
+      }
+    }
+
+    loadLiveProducts();
+  </script>
 </body>
 </html>
