@@ -229,6 +229,238 @@ main {
 
   </style>
 </head>
+/* ASHHAZ PREMIUM CHARCOAL-GOLD THEME */
+
+:root {
+  --charcoal: #242930;
+  --charcoal-light: #343a42;
+  --gold: #b99a62;
+  --cream: #f7f3ec;
+  --text: #292d32;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 25px;
+}
+
+body {
+  background: var(--cream);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+header {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    var(--charcoal),
+    var(--charcoal-light)
+  );
+  border-bottom: 3px solid var(--gold);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  padding: 14px 6%;
+  min-height: 100px;
+}
+
+.brand-logo img {
+  height: 78px;
+  max-width: 190px;
+  width: auto;
+  object-fit: contain;
+  transition: transform 0.25s ease;
+}
+
+.brand-logo:hover img {
+  transform: scale(1.04);
+}
+
+header nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+header nav a {
+  margin: 0;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+header nav a:hover {
+  color: #e5ca91;
+}
+
+.hero {
+  position: relative;
+  padding: 95px 8%;
+  text-align: center;
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(185, 154, 98, 0.18),
+      transparent 55%
+    ),
+    linear-gradient(135deg, #fbf8f2, #e9e0d1);
+  border-bottom: 1px solid #dfd1b9;
+}
+
+.hero h2 {
+  max-width: 950px;
+  margin: 0 auto 18px;
+  color: var(--charcoal);
+  font-size: clamp(30px, 4.5vw, 52px);
+  line-height: 1.18;
+  letter-spacing: -0.7px;
+}
+
+.hero p {
+  max-width: 700px;
+  margin: 0 auto;
+  color: #5d6268;
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+.button {
+  display: inline-block;
+  margin-top: 24px;
+  padding: 14px 28px;
+  background: var(--charcoal);
+  color: #fff;
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  box-shadow: 0 5px 14px rgba(36, 41, 48, 0.16);
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.button:hover {
+  background: var(--gold);
+  color: #20252b;
+  transform: translateY(-2px);
+}
+
+main {
+  max-width: 1250px;
+  margin: auto;
+  padding: 45px 24px;
+}
+
+main h2 {
+  color: var(--charcoal);
+  margin-bottom: 22px;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(220px, 1fr)
+  );
+  gap: 24px;
+}
+
+.product {
+  overflow: hidden;
+  background: #fff;
+  padding: 24px;
+  border: 1px solid #e5dccd;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(41, 45, 50, 0.05);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.product:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(41, 45, 50, 0.12);
+}
+
+.product h3 {
+  color: var(--charcoal);
+  line-height: 1.35;
+}
+
+#live-products .product img {
+  display: block;
+  width: 100%;
+  height: 230px;
+  object-fit: contain;
+  margin: 0 auto 16px;
+  border-radius: 8px;
+}
+
+#contact {
+  margin-top: 40px;
+  padding: 30px;
+  background: linear-gradient(135deg, #eee7db, #f9f5ee);
+  border: 1px solid #dfd1b9;
+  border-radius: 12px;
+}
+
+footer {
+  background: linear-gradient(
+    135deg,
+    var(--charcoal),
+    var(--charcoal-light)
+  );
+  color: #fff;
+  text-align: center;
+  padding: 28px 18px;
+  border-top: 3px solid var(--gold);
+}
+
+@media (max-width: 600px) {
+  header {
+    padding: 14px 18px;
+    gap: 14px;
+  }
+
+  .brand-logo img {
+    height: 58px;
+    max-width: 145px;
+  }
+
+  header nav {
+    gap: 12px 18px;
+  }
+
+  header nav a {
+    font-size: 14px;
+  }
+
+  .hero {
+    padding: 58px 20px;
+  }
+
+  .hero p {
+    font-size: 16px;
+  }
+
+  main {
+    padding: 28px 16px;
+  }
+
+  .products {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .product {
+    padding: 20px;
+  }
+
+  #contact {
+    padding: 22px;
+  }
+}
+
 <body>
   <header>
    <a href="/" class="brand-logo">
