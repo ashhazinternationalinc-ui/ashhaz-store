@@ -21,6 +21,122 @@
     .product { background: white; padding: 25px; border-radius: 10px; border: 1px solid #e7e4dc; }
     .product h3 { color: #173f32; }
     footer { background: #173f32; color: white; text-align: center; padding: 25px; }
+    /* ASHHAZ PREMIUM BRAND DESIGN */
+body {
+  background: #F7F4EF;
+  color: #292D32;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  background: linear-gradient(135deg, #20252B, #343A42);
+  color: #FFFFFF;
+  border-bottom: 4px solid #B99A62;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.15);
+}
+
+header h1 {
+  color: #FFFFFF;
+  letter-spacing: 1px;
+}
+
+nav a {
+  color: #FFFFFF;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+nav a:hover {
+  color: #D5B578;
+}
+
+.hero {
+  background: linear-gradient(135deg, #F7F4EF, #EAE4D9);
+  padding: 85px 8%;
+  border-bottom: 1px solid #E0D5C3;
+}
+
+.hero h2 {
+  color: #292D32;
+  line-height: 1.2;
+}
+
+.hero p {
+  color: #5D6268;
+}
+
+.button {
+  background: #C52D32;
+  color: #FFFFFF;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(197,45,50,0.18);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.button:hover {
+  background: #A51F25;
+  transform: translateY(-2px);
+}
+
+main {
+  max-width: 1200px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+.products {
+  gap: 24px;
+}
+
+.product {
+  background: #FFFFFF;
+  border: 1px solid #E7DED1;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(41,45,50,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 26px rgba(41,45,50,0.12);
+}
+
+.product h3 {
+  color: #292D32;
+}
+
+#contact {
+  background: #EEE8DE;
+  border-radius: 12px;
+  padding: 28px;
+  margin-top: 35px;
+}
+
+footer {
+  background: #20252B;
+  color: #FFFFFF;
+  text-align: center;
+  padding: 30px;
+  border-top: 4px solid #B99A62;
+}
+
+@media (max-width: 600px) {
+  header {
+    padding: 18px 5%;
+  }
+
+  .hero {
+    padding: 55px 6%;
+  }
+
+  main {
+    padding: 25px 14px;
+  }
+
+  .products {
+    grid-template-columns: 1fr;
+  }
+}
   </style>
 </head>
 <body>
