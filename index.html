@@ -137,11 +137,33 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+    .brand-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.brand-logo img {
+  height: 65px;
+  width: auto;
+  max-width: 180px;
+  object-fit: contain;
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .brand-logo img {
+    height: 48px;
+    max-width: 130px;
+  }
+}
   </style>
 </head>
 <body>
   <header>
-    <h1>Ashhaz International Inc</h1>
+   <a href="/" class="brand-logo">
+  <img src="/logo.png" alt="Ashhaz International Inc Logo">
+</a>
     <nav>
       <a href="#home">Home</a>
       <a href="#products">Products</a>
