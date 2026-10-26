@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ashhaz Admin Login</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; display: grid; place-items: center;
+      background: #edf1e9; font-family: Arial, sans-serif; color: #20392f;
+      padding: 20px;
+    }
+    .login {
+      background: white; width: 100%; max-width: 390px; padding: 32px;
+      border-radius: 12px; box-shadow: 0 5px 25px #00000015;
+    }
+    h1 { font-size: 25px; margin-top: 0; }
+    p { line-height: 1.5; color: #59665e; }
+    label { display: block; margin: 22px 0 8px; font-weight: bold; }
+    input {
+      width: 100%; padding: 12px; border: 1px solid #bbc7be;
+      border-radius: 5px; font-size: 16px;
+    }
+    button {
+      width: 100%; margin-top: 18px; padding: 13px; border: 0;
+      border-radius: 5px; background: #173f32; color: white;
+      font-size: 16px; cursor: pointer;
+    }
+    #message { overflow-wrap: anywhere; }
+  </style>
+</head>
+<body>
+  <main class="login">
+    <h1>Ashhaz Admin</h1>
+    <p>Sign in to manage your store.</p>
+    <form id="loginForm">
+      <label for="password">Admin password</label>
+      <input id="password" type="password" autocomplete="current-password"
+        required maxlength="256" placeholder="Enter admin password">
+      <button type="submit">Sign in</button>
+    </form>
+    <p id="message" role="status"></p>
+  </main>
+
+  <script>
+    const form = document.getElementById("loginForm");
+    const message = document.getElementById("message");
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      message.textContent = "Signing in...";
+      const password = document.getElementById("password").value;
+
+      try {
+        const response = await fetch("/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "same-origin",
+          body: JSON.stringify({ password })
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.ok) {
+          message.textContent = "Login successful. Admin dashboard is the next step.";
+        } else {
+          message.textContent = result.error || "Login failed. Please try again.";
+        }
+      } catch (error) {
+        message.textContent = "Server se connection nahi ho saka. Please try again.";
+      }
+    });
+  </script>
+</body>
+</html>
