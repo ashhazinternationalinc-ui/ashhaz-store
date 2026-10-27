@@ -3,152 +3,217 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ashhaz Admin Dashboard</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f4f5f7;color:#222}
-header{background:#20251f;color:#fff;padding:22px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-header h1{margin:0;font-size:23px}
-button{cursor:pointer;border:0;border-radius:7px;padding:11px 15px;background:#b58a45;color:white;font-weight:bold}
-button:hover{opacity:.9}
+header{background:#20251f;color:white;padding:20px 5%;display:flex;justify-content:space-between;align-items:center}
 main{max-width:1200px;margin:25px auto;padding:0 16px}
-nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
-nav button{background:#fff;color:#333;border:1px solid #ddd}
-nav button.active{background:#b58a45;color:#fff}
-.panel{background:#fff;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 3px 15px #0000000b}
-h2{margin-top:0}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:20px}
-.stat{background:#fff;border-radius:12px;padding:20px;border:1px solid #eee}
-.stat span{color:#666;font-size:13px}.stat strong{display:block;font-size:25px;margin-top:8px}
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:650px}
-th,td{text-align:left;padding:12px;border-bottom:1px solid #eee;font-size:14px}
+button{border:0;border-radius:6px;padding:10px 14px;background:#a77d36;color:white;cursor:pointer;font-weight:bold;margin:3px}
+button:hover{opacity:.85}
+nav{margin-bottom:18px}
+nav button{background:white;color:#222;border:1px solid #ddd}
+nav button.active{background:#a77d36;color:white}
+.panel,.stat{background:white;border-radius:10px;padding:18px;margin-bottom:18px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat span{color:#666;font-size:13px}
+.stat strong{display:block;font-size:25px;margin-top:8px}
+table{border-collapse:collapse;width:100%;min-width:750px}
+th,td{padding:11px;border-bottom:1px solid #eee;text-align:left;font-size:14px}
 th{background:#f8f6f1}
-input,textarea,select{width:100%;padding:11px;border:1px solid #ccc;border-radius:6px;margin:6px 0 14px;font:inherit}
-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.table-wrap{overflow-x:auto;margin-top:15px}
+input,textarea{width:100%;padding:10px;border:1px solid #ccc;border-radius:5px;margin:5px 0 12px}
+label{font-size:13px;font-weight:bold}
+form{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
 .field{display:flex;flex-direction:column}
-.field.full{grid-column:1/-1}
+.full{grid-column:1/-1}
 .hidden{display:none}
-#message{margin:12px 0;color:#77551e;overflow-wrap:anywhere}
+#message{padding:10px 0;overflow-wrap:anywhere}
+.danger{background:#b83232}
+.secondary{background:#555}
 .small{font-size:13px;color:#666}
 </style>
 </head>
 <body>
 <header>
-  <h1>Ashhaz Store — Admin</h1>
-  <button id="logoutBtn">Logout</button>
+<h2>Ashhaz Store — Admin</h2>
+<button id="logoutBtn">Logout</button>
 </header>
 <main>
-  <div id="message">Dashboard loading...</div>
-  <div class="stats">
-    <div class="stat"><span>Active products loaded</span><strong id="productCount">—</strong></div>
-    <div class="stat"><span>Orders loaded</span><strong id="orderCount">—</strong></div>
-  </div>
-  <nav>
-    <button class="active" data-tab="products">Products</button>
-    <button data-tab="add">Add Product</button>
-    <button data-tab="orders">Orders</button>
-  </nav>
-  <section class="panel" id="products">
-    <h2>Products</h2>
-    <button onclick="loadProducts()">Refresh Products</button>
-    <div class="table-wrap"><table><thead><tr><th>ID</th><th>SKU</th><th>Name</th><th>Price</th><th>Stock</th><th>Category</th></tr></thead><tbody id="productRows"></tbody></table></div>
-  </section>
-  <section class="panel hidden" id="add">
-    <h2>Add New Product</h2>
-    <p class="small">Fill in the product details. Price is in ₹.</p>
-    <form id="productForm">
-      <div class="field"><label>Product name *</label><input name="name" required></div>
-      <div class="field"><label>SKU</label><input name="sku"></div>
-      <div class="field"><label>Price (₹) *</label><input name="price" type="number" min="0" step="0.01" required></div>
-      <div class="field"><label>Stock *</label><input name="stock" type="number" min="0" step="1" required></div>
-      <div class="field"><label>Category</label><input name="category"></div>
-      <div class="field"><label>Image URL</label><input name="image_url" type="url"></div>
-      <div class="field full"><label>Description</label><textarea name="description" rows="3"></textarea></div>
-      <div class="field full"><button type="submit">Save Product</button></div>
-    </form>
-  </section>
-  <section class="panel hidden" id="orders">
-    <h2>Orders</h2>
-    <button onclick="loadOrders()">Refresh Orders</button>
-    <div class="table-wrap"><table><thead><tr><th>Order No.</th><th>Customer</th><th>Mobile</th><th>Total</th><th>Payment</th><th>Status</th><th>Date</th></tr></thead><tbody id="orderRows"></tbody></table></div>
-  </section>
+<div id="message">Loading dashboard...</div>
+
+<div class="stats">
+<div class="stat"><span>Active Products</span><strong id="productCount">—</strong></div>
+<div class="stat"><span>Orders</span><strong id="orderCount">—</strong></div>
+</div>
+
+<nav>
+<button class="active" data-tab="products">Products</button>
+<button data-tab="add">Add Product</button>
+<button data-tab="orders">Orders</button>
+</nav>
+
+<section class="panel" id="products">
+<h2>Products</h2>
+<button onclick="loadProducts()">Refresh Products</button>
+<div class="table-wrap">
+<table>
+<thead><tr><th>ID</th><th>SKU</th><th>Name</th><th>Price</th><th>Stock</th><th>Category</th><th>Actions</th></tr></thead>
+<tbody id="productRows"></tbody>
+</table>
+</div>
+</section>
+
+<section class="panel hidden" id="add">
+<h2 id="formTitle">Add Product</h2>
+<form id="productForm">
+<input type="hidden" name="id">
+<div class="field"><label>Product Name *</label><input name="name" required></div>
+<div class="field"><label>SKU</label><input name="sku"></div>
+<div class="field"><label>Price (₹) *</label><input name="price" type="number" min="0" step="0.01" required></div>
+<div class="field"><label>Stock *</label><input name="stock" type="number" min="0" step="1" required></div>
+<div class="field"><label>Category</label><input name="category"></div>
+<div class="field"><label>Image URL</label><input name="image_url" type="url"></div>
+<div class="field full"><label>Description</label><textarea name="description" rows="3"></textarea></div>
+<div class="field full">
+<div>
+<button type="submit" id="saveBtn">Save Product</button>
+<button type="button" class="secondary" onclick="resetForm()">Clear Form</button>
+</div>
+</div>
+</form>
+</section>
+
+<section class="panel hidden" id="orders">
+<h2>Orders</h2>
+<button onclick="loadOrders()">Refresh Orders</button>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Order No.</th><th>Customer</th><th>Mobile</th><th>Address</th><th>Total</th><th>Payment</th><th>Status</th><th>Date</th></tr></thead>
+<tbody id="orderRows"></tbody>
+</table>
+</div>
+</section>
 </main>
+
 <script>
-const message = document.getElementById("message");
+const message=document.getElementById("message");
+function say(t){message.textContent=t;}
 
-function showMessage(text){ message.textContent = text; }
-
-async function api(url, options = {}) {
-  const response = await fetch(url, {credentials:"same-origin", ...options});
-  const result = await response.json().catch(()=>({}));
-  if(response.status === 401){
-    window.location.href = "/admin.html";
-    throw new Error("Admin login required. Please sign in again.");
-  }
-  if(!response.ok) throw new Error(result.error || "Request failed (" + response.status + ")");
-  return result;
+async function api(url,options={}){
+ const response=await fetch(url,{credentials:"same-origin",...options});
+ const data=await response.json().catch(()=>({}));
+ if(response.status===401){
+   window.location.href="/admin.html";
+   throw new Error("Login required. Please sign in again.");
+ }
+ if(!response.ok)throw new Error(data.error||"Request failed: "+response.status);
+ return data;
 }
 
-document.querySelectorAll("[data-tab]").forEach(button=>{
-  button.addEventListener("click",()=>{
-    document.querySelectorAll("[data-tab]").forEach(b=>b.classList.toggle("active",b===button));
-    document.querySelectorAll("main > section").forEach(s=>s.classList.toggle("hidden",s.id!==button.dataset.tab));
-  });
+document.querySelectorAll("[data-tab]").forEach(btn=>{
+ btn.addEventListener("click",()=>{
+  document.querySelectorAll("[data-tab]").forEach(b=>b.classList.toggle("active",b===btn));
+  document.querySelectorAll("main > section").forEach(s=>s.classList.toggle("hidden",s.id!==btn.dataset.tab));
+ });
 });
 
-function cell(row, value){
-  const td=document.createElement("td");
-  td.textContent=value==null?"":String(value);
-  row.appendChild(td);
+function addCell(tr,value){
+ const td=document.createElement("td");
+ td.textContent=value==null?"":String(value);
+ tr.appendChild(td);
 }
+
 async function loadProducts(){
-  try{
-    const data=await api("/api/products");
-    const rows=document.getElementById("productRows");
-    rows.replaceChildren();
-    (data.products||[]).forEach(p=>{
-      const tr=document.createElement("tr");
-      [p.id,p.sku,p.name,"₹"+Number(p.price||0).toLocaleString("en-IN"),p.stock,p.category].forEach(v=>cell(tr,v));
-      rows.appendChild(tr);
-    });
-    document.getElementById("productCount").textContent=(data.products||[]).length;
-    showMessage("Products loaded.");
-  }catch(e){showMessage("Products: "+e.message);}
+ try{
+  const data=await api("/api/products");
+  const rows=document.getElementById("productRows");
+  rows.replaceChildren();
+  (data.products||[]).forEach(p=>{
+   const tr=document.createElement("tr");
+   [p.id,p.sku,p.name,"₹"+Number(p.price||0).toLocaleString("en-IN"),p.stock,p.category].forEach(v=>addCell(tr,v));
+   const actions=document.createElement("td");
+   const edit=document.createElement("button");
+   edit.textContent="Edit";
+   edit.addEventListener("click",()=>editProduct(p));
+   actions.appendChild(edit);
+   const del=document.createElement("button");
+   del.textContent="Delete";
+   del.className="danger";
+   del.addEventListener("click",()=>deleteProduct(p));
+   actions.appendChild(del);
+   tr.appendChild(actions);
+   rows.appendChild(tr);
+  });
+  document.getElementById("productCount").textContent=(data.products||[]).length;
+  say("Products loaded.");
+ }catch(e){say("Products error: "+e.message);}
 }
+
+function editProduct(p){
+ const f=document.getElementById("productForm");
+ Object.keys(p).forEach(k=>{if(f.elements[k])f.elements[k].value=p[k]??"";});
+ document.getElementById("formTitle").textContent="Edit Product #"+p.id;
+ document.getElementById("saveBtn").textContent="Update Product";
+ document.querySelector('[data-tab="add"]').click();
+ say("Edit the fields and click Update Product.");
+}
+
+function resetForm(){
+ const f=document.getElementById("productForm");
+ f.reset();
+ f.elements.id.value="";
+ document.getElementById("formTitle").textContent="Add Product";
+ document.getElementById("saveBtn").textContent="Save Product";
+}
+
+async function deleteProduct(p){
+ if(!confirm("Delete product '"+p.name+"'? It will be hidden from the store."))return;
+ try{
+  await api("/api/products?id="+encodeURIComponent(p.id),{method:"DELETE"});
+  say("Product deleted/hidden.");
+  await loadProducts();
+ }catch(e){say("Delete failed: "+e.message);}
+}
+
+document.getElementById("productForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const f=e.currentTarget;
+ const payload=Object.fromEntries(new FormData(f).entries());
+ const editing=Boolean(payload.id);
+ payload.price=Number(payload.price);
+ payload.stock=Number(payload.stock);
+ if(editing)payload.id=Number(payload.id);
+ try{
+  await api("/api/products",{method:editing?"PUT":"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+  say(editing?"Product updated successfully.":"Product added successfully.");
+  resetForm();
+  await loadProducts();
+  document.querySelector('[data-tab="products"]').click();
+ }catch(err){say("Save failed: "+err.message);}
+});
+
 async function loadOrders(){
-  try{
-    const data=await api("/api/orders");
-    const rows=document.getElementById("orderRows");
-    rows.replaceChildren();
-    (data.orders||[]).forEach(o=>{
-      const tr=document.createElement("tr");
-      [o.order_number,o.customer_name,o.mobile,"₹"+Number(o.total_amount||0).toLocaleString("en-IN"),o.payment_method+" / "+o.payment_status,o.order_status,o.created_at].forEach(v=>cell(tr,v));
-      rows.appendChild(tr);
-    });
-    document.getElementById("orderCount").textContent=(data.orders||[]).length;
-    showMessage("Orders loaded.");
-  }catch(e){showMessage("Orders: "+e.message);}
+ try{
+  const data=await api("/api/orders");
+  const rows=document.getElementById("orderRows");
+  rows.replaceChildren();
+  (data.orders||[]).forEach(o=>{
+   const tr=document.createElement("tr");
+   [o.order_number,o.customer_name,o.mobile,[o.address,o.city,o.state,o.pincode].filter(Boolean).join(", "),"₹"+Number(o.total_amount||0).toLocaleString("en-IN"),[o.payment_method,o.payment_status].filter(Boolean).join(" / "),o.order_status,o.created_at].forEach(v=>addCell(tr,v));
+   rows.appendChild(tr);
+  });
+  document.getElementById("orderCount").textContent=(data.orders||[]).length;
+  say("Orders loaded.");
+ }catch(e){say("Orders error: "+e.message);}
 }
-document.getElementById("productForm").addEventListener("submit",async event=>{
-  event.preventDefault();
-  const form=event.currentTarget;
-  const f=new FormData(form);
-  const payload=Object.fromEntries(f.entries());
-  payload.price=Number(payload.price);
-  payload.stock=Number(payload.stock);
-  try{
-    await api("/api/products",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
-    form.reset();
-    showMessage("Product saved successfully.");
-    await loadProducts();
-    document.querySelector('[data-tab="products"]').click();
-  }catch(e){showMessage("Could not save product: "+e.message);}
-});
+
 document.getElementById("logoutBtn").addEventListener("click",async()=>{
-  try{await fetch("/api/logout",{method:"POST",credentials:"same-origin"});}finally{window.location.href="/admin.html";}
+ try{await fetch("/api/logout",{method:"POST",credentials:"same-origin"});}
+ finally{window.location.href="/admin.html";}
 });
+
 loadProducts();
 loadOrders();
 </script>
