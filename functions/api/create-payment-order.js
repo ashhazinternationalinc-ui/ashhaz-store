@@ -1,4 +1,3 @@
-
 export async function onRequestPost({ request, env }) {
   try {
     if (!env.RAZORPAY_KEY_ID || !env.RAZORPAY_KEY_SECRET) {
