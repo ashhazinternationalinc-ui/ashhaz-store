@@ -319,13 +319,30 @@ function renderProducts(products) {
     stock.className = "product-stock";
     const quantity = Number(product.stock);
     stock.textContent = "Stock: " + (Number.isFinite(quantity) ? quantity : 0);
+    const addToCart = document.createElement("button");
+    addToCart.className = "product-button";
+    addToCart.type = "button";
+    addToCart.textContent = "Add to Cart";
+    addToCart.addEventListener("click", function() {
+      const cart = JSON.parse(localStorage.getItem("ashhaz_cart") || "[]");
+      const existing = cart.find(function(item) {
+        return String(item.id) === String(product.id);
+      });
 
-    const enquire = document.createElement("a");
-    enquire.className = "product-button";
-    enquire.href = "#contact";
-    enquire.textContent = "Enquire About Product";
-    enquire.addEventListener("click", function() {
-      document.getElementById("contact").scrollIntoView({behavior:"smooth"});
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({
+          id: product.id,
+          name: product.name,
+          price: Number(product.price) || 0,
+          quantity: 1
+        });
+      }
+
+      localStorage.setItem("ashhaz_cart", JSON.stringify(cart));
+      alert(product.name + " cart mein add ho gaya.");
+    });
     });
 
     card.append(image, name, price, stock, enquire);
