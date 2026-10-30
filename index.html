@@ -128,6 +128,21 @@ footer{background:linear-gradient(120deg,#1c2024,#30353b);color:#f4f0e9;border-t
   .footer-main{grid-template-columns:1fr;gap:20px;padding:28px 20px}
   .footer-bottom{padding:14px 20px}
 }
+ .cart-toggle{padding:9px 13px;background:var(--gold);color:#20252b;border:1px solid #e7cc90;border-radius:4px;font-weight:bold;cursor:pointer}
+.cart-overlay{display:none;position:fixed;inset:0;z-index:9998;background:#0009;padding:18px;align-items:center;justify-content:center}
+.cart-overlay.open{display:flex}
+.cart-panel{width:min(560px,100%);max-height:85vh;overflow:auto;background:#fff;border-radius:8px;padding:22px;box-shadow:0 15px 50px #0005}
+.cart-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--border);padding-bottom:12px}
+.cart-heading h2{margin:0;font-family:Georgia,serif;font-weight:500}
+.cart-close{border:0;background:var(--dark);color:#fff;border-radius:4px;padding:8px 12px;cursor:pointer}
+.cart-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--border)}
+.cart-item-name{font-weight:bold;font-size:14px}
+.cart-item-price{font-size:13px;color:var(--muted)}
+.cart-actions{display:flex;align-items:center;gap:7px}
+.cart-actions button{border:1px solid var(--border);background:#f8f5ef;border-radius:4px;padding:5px 9px;cursor:pointer}
+.cart-total{display:flex;justify-content:space-between;font-size:18px;font-weight:bold;padding:18px 0}
+.cart-empty{padding:25px 5px;text-align:center;color:var(--muted)}
+@media(max-width:560px){.cart-toggle{font-size:12px;padding:8px 10px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
 </style>
 </head>
@@ -147,6 +162,9 @@ footer{background:linear-gradient(120deg,#1c2024,#30353b);color:#f4f0e9;border-t
       <a href="#about">About</a>
       <a href="/admin">Admin</a>
     </nav>
+    <button class="cart-toggle" id="cart-toggle" type="button" aria-label="Open shopping cart">
+      🛒 Cart (<span id="cart-count">0</span>)
+    </button>
     <form class="search" id="search-form" role="search">
       <input id="product-search" type="search" placeholder="Search products..." aria-label="Search products">
       <button type="submit" aria-label="Search">⌕</button>
@@ -224,6 +242,18 @@ footer{background:linear-gradient(120deg,#1c2024,#30353b);color:#f4f0e9;border-t
   </section>
 </main>
 
+<div class="cart-overlay" id="cart-overlay" aria-hidden="true">
+  <section class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+    <div class="cart-heading">
+      <h2 id="cart-title">Your Shopping Cart</h2>
+      <button class="cart-close" id="cart-close" type="button">Close</button>
+    </div>
+    <div id="cart-items"></div>
+    <div class="cart-total"><span>Total</span><span id="cart-total">₹0.00</span></div>
+    <p class="cart-item-price">Checkout and payment will be added separately after the cart is tested.</p>
+  </section>
+</div>
+
 <footer>
   <div class="footer-main">
     <div class="footer-about">
@@ -262,6 +292,128 @@ footer{background:linear-gradient(120deg,#1c2024,#30353b);color:#f4f0e9;border-t
 const productBox = document.getElementById("live-product-list");
 const searchInput = document.getElementById("product-search");
 let allProducts = [];
+
+const cartOverlay = document.getElementById("cart-overlay");
+const cartItemsBox = document.getElementById("cart-items");
+const cartCount = document.getElementById("cart-count");
+
+function readCart() {
+  try {
+    const value = JSON.parse(localStorage.getItem("ashhaz_cart") || "[]");
+    return Array.isArray(value) ? value : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+function saveCart(cart) {
+  localStorage.setItem("ashhaz_cart", JSON.stringify(cart));
+  updateCartDisplay();
+}
+
+function money(value) {
+  return "₹" + Number(value || 0).toLocaleString("en-IN", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+
+function updateCartDisplay() {
+  const cart = readCart();
+  const count = cart.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0);
+  cartCount.textContent = String(count);
+  cartItemsBox.replaceChildren();
+
+  if (!cart.length) {
+    const empty = document.createElement("p");
+    empty.className = "cart-empty";
+    empty.textContent = "Your cart is empty.";
+    cartItemsBox.appendChild(empty);
+  }
+
+  let total = 0;
+  cart.forEach(function(item, index) {
+    const quantity = Math.max(1, Number(item.quantity) || 1);
+    const price = Number(item.price) || 0;
+    total += price * quantity;
+
+    const row = document.createElement("div");
+    row.className = "cart-item";
+
+    const details = document.createElement("div");
+    const name = document.createElement("div");
+    name.className = "cart-item-name";
+    name.textContent = item.name || "Product";
+    const linePrice = document.createElement("div");
+    linePrice.className = "cart-item-price";
+    linePrice.textContent = money(price) + " each";
+    details.append(name, linePrice);
+
+    const actions = document.createElement("div");
+    actions.className = "cart-actions";
+
+    const minus = document.createElement("button");
+    minus.type = "button";
+    minus.textContent = "−";
+    minus.setAttribute("aria-label", "Decrease quantity");
+    minus.addEventListener("click", function() {
+      const latest = readCart();
+      if (!latest[index]) return;
+      latest[index].quantity = (Number(latest[index].quantity) || 1) - 1;
+      if (latest[index].quantity <= 0) latest.splice(index, 1);
+      saveCart(latest);
+    });
+
+    const qty = document.createElement("span");
+    qty.textContent = String(quantity);
+
+    const plus = document.createElement("button");
+    plus.type = "button";
+    plus.textContent = "+";
+    plus.setAttribute("aria-label", "Increase quantity");
+    plus.addEventListener("click", function() {
+      const latest = readCart();
+      if (!latest[index]) return;
+      latest[index].quantity = (Number(latest[index].quantity) || 1) + 1;
+      saveCart(latest);
+    });
+
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.textContent = "Remove";
+    remove.addEventListener("click", function() {
+      const latest = readCart();
+      latest.splice(index, 1);
+      saveCart(latest);
+    });
+
+    actions.append(minus, qty, plus, remove);
+    row.append(details, actions);
+    cartItemsBox.appendChild(row);
+  });
+
+  document.getElementById("cart-total").textContent = money(total);
+}
+
+function openCart() {
+  updateCartDisplay();
+  cartOverlay.classList.add("open");
+  cartOverlay.setAttribute("aria-hidden", "false");
+}
+
+function closeCart() {
+  cartOverlay.classList.remove("open");
+  cartOverlay.setAttribute("aria-hidden", "true");
+}
+
+document.getElementById("cart-toggle").addEventListener("click", openCart);
+document.getElementById("cart-close").addEventListener("click", closeCart);
+cartOverlay.addEventListener("click", function(event) {
+  if (event.target === cartOverlay) closeCart();
+});
+document.addEventListener("keydown", function(event) {
+  if (event.key === "Escape") closeCart();
+});
 
 function showMessage(message) {
   productBox.replaceChildren();
@@ -323,7 +475,7 @@ function renderProducts(products) {
     addToCart.type = "button";
     addToCart.textContent = "Add to Cart";
     addToCart.addEventListener("click", function() {
-      const cart = JSON.parse(localStorage.getItem("ashhaz_cart") || "[]");
+      const cart = readCart();
       const existing = cart.find(function(item) {
         return String(item.id) === String(product.id);
       });
@@ -339,7 +491,7 @@ function renderProducts(products) {
         });
       }
 
-      localStorage.setItem("ashhaz_cart", JSON.stringify(cart));
+      saveCart(cart);
       alert(product.name + " cart mein add ho gaya.");
     });
 
@@ -396,6 +548,7 @@ document.querySelectorAll("[data-category]").forEach(function(category) {
   });
 });
 
+updateCartDisplay();
 loadProducts();
 </script>
 </body>
