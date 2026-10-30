@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -343,9 +342,8 @@ function renderProducts(products) {
       localStorage.setItem("ashhaz_cart", JSON.stringify(cart));
       alert(product.name + " cart mein add ho gaya.");
     });
-    });
 
-    card.append(image, name, price, stock, enquire);
+    card.append(image, name, price, stock, addToCart);
     productBox.appendChild(card);
   });
 }
