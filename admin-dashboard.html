@@ -201,7 +201,7 @@ async function loadOrders(){
   rows.replaceChildren();
   (data.orders||[]).forEach(o=>{
    const tr=document.createElement("tr");
-   [o.order_number,o.customer_name,o.mobile,[o.address,o.city,o.state,o.pincode].filter(Boolean).join(", "),"₹"+Number(o.total_amount||0).toLocaleString("en-IN"),[o.payment_method,o.payment_status].filter(Boolean).join(" / "),o.order_status,o.created_at].forEach(v=>addCell(tr,v));
+   [o.order_number,o.customer_name,o.mobile,[o.address,o.city,o.state,o.pincode].filter(Boolean).join(", "),"₹"+Number(o.total_amount||0).toLocaleString("en-IN"),[o.payment_method,o.payment_status].filter(Boolean).join(" / "),o.order_status,new Date(o.created_at.endsWith("Z") ? o.created_at : o.created_at.replace(" ", "T") + "Z").toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })].forEach(v=>addCell(tr,v));
    rows.appendChild(tr);
   });
   document.getElementById("orderCount").textContent=(data.orders||[]).length;
