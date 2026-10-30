@@ -128,6 +128,11 @@ footer{background:linear-gradient(120deg,#1c2024,#30353b);color:#f4f0e9;border-t
   .footer-main{grid-template-columns:1fr;gap:20px;padding:28px 20px}
   .footer-bottom{padding:14px 20px}
 }
+ .checkout-label{display:block;margin:12px 0 4px;font-size:13px;font-weight:bold}
+.checkout-input{display:block;width:100%;padding:10px;border:1px solid var(--border);border-radius:4px;background:#fff;font:inherit}
+#checkout-form{margin-top:18px;border-top:1px solid var(--border);padding-top:12px}
+#checkout-form[hidden]{display:none}
+#checkout-status{font-size:13px;color:var(--muted)}
  .cart-toggle{padding:9px 13px;background:var(--gold);color:#20252b;border:1px solid #e7cc90;border-radius:4px;font-weight:bold;cursor:pointer}
 .cart-overlay{display:none;position:fixed;inset:0;z-index:9998;background:#0009;padding:18px;align-items:center;justify-content:center}
 .cart-overlay.open{display:flex}
@@ -250,7 +255,25 @@ footer{background:linear-gradient(120deg,#1c2024,#30353b);color:#f4f0e9;border-t
     </div>
     <div id="cart-items"></div>
     <div class="cart-total"><span>Total</span><span id="cart-total">₹0.00</span></div>
-    <p class="cart-item-price">Checkout and payment will be added separately after the cart is tested.</p>
+    <button class="product-button" id="show-checkout" type="button">Proceed to Checkout</button>
+    <form id="checkout-form" hidden>
+      <h3>Delivery Details</h3>
+      <label class="checkout-label" for="customer-name">Full Name *</label>
+      <input class="checkout-input" id="customer-name" name="customer_name" autocomplete="name" required maxlength="150">
+      <label class="checkout-label" for="customer-mobile">Mobile Number *</label>
+      <input class="checkout-input" id="customer-mobile" name="mobile" type="tel" autocomplete="tel" required minlength="8" maxlength="20" pattern="[0-9+() -]{8,20}">
+      <label class="checkout-label" for="customer-address">Full Address *</label>
+      <textarea class="checkout-input" id="customer-address" name="address" autocomplete="street-address" required maxlength="1000" rows="3"></textarea>
+      <label class="checkout-label" for="customer-city">City</label>
+      <input class="checkout-input" id="customer-city" name="city" autocomplete="address-level2" maxlength="100">
+      <label class="checkout-label" for="customer-state">State</label>
+      <input class="checkout-input" id="customer-state" name="state" autocomplete="address-level1" maxlength="100">
+      <label class="checkout-label" for="customer-pincode">PIN Code</label>
+      <input class="checkout-input" id="customer-pincode" name="pincode" inputmode="numeric" autocomplete="postal-code" maxlength="12">
+      <p><strong>Payment Method:</strong> Cash on Delivery (COD)</p>
+      <button class="product-button" id="place-order" type="submit">Place COD Order</button>
+      <p id="checkout-status" role="status" aria-live="polite"></p>
+    </form>
   </section>
 </div>
 
@@ -407,6 +430,85 @@ function closeCart() {
 }
 
 document.getElementById("cart-toggle").addEventListener("click", openCart);
+document.getElementById("show-checkout").addEventListener("click", function() {
+  const cart = readCart();
+  if (!cart.length) {
+    document.getElementById("checkout-status").textContent = "Your cart is empty.";
+    document.getElementById("checkout-form").hidden = false;
+    return;
+  }
+  document.getElementById("checkout-form").hidden = false;
+  document.getElementById("checkout-form").scrollIntoView({behavior:"smooth", block:"nearest"});
+});
+
+document.getElementById("checkout-form").addEventListener("submit", async function(event) {
+  event.preventDefault();
+  const cart = readCart();
+  const status = document.getElementById("checkout-status");
+  const submitButton = document.getElementById("place-order");
+  if (!cart.length) {
+    status.textContent = "Your cart is empty. Add a product first.";
+    return;
+  }
+
+  const form = event.currentTarget;
+  if (!form.reportValidity()) return;
+
+  const payload = {
+    customer_name: form.elements.customer_name.value.trim(),
+    mobile: form.elements.mobile.value.trim(),
+    address: form.elements.address.value.trim(),
+    city: form.elements.city.value.trim(),
+    state: form.elements.state.value.trim(),
+    pincode: form.elements.pincode.value.trim(),
+    items: cart.map(function(item) {
+      return { product_id: Number(item.id), quantity: Number(item.quantity) };
+    })
+  };
+
+  if (payload.items.some(function(item) {
+    return !Number.isInteger(item.product_id) || item.product_id < 1 ||
+      !Number.isInteger(item.quantity) || item.quantity < 1;
+  })) {
+    status.textContent = "Cart mein product details sahi nahi hain. Please refresh karke dobara try karein.";
+    return;
+  }
+
+  submitButton.disabled = true;
+  submitButton.textContent = "Submitting order...";
+  status.textContent = "Your order is being saved. Please wait.";
+
+  try {
+    const response = await fetch("/api/orders", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify(payload)
+    });
+    const result = await response.json().catch(function() { return {}; });
+    if (!response.ok || !result.ok) {
+      throw new Error(result.error || "Order save nahi ho saka. Please try again.");
+    }
+
+    localStorage.removeItem("ashhaz_cart");
+    updateCartDisplay();
+    form.reset();
+    form.hidden = true;
+    status.textContent = "";
+    const success = document.createElement("p");
+    success.className = "cart-empty";
+    success.textContent = "Order successfully placed! Order Number: " + result.order_number +
+      ". Total: " + money(result.total_amount) + ". Payment: Cash on Delivery.";
+    cartItemsBox.replaceChildren(success);
+    document.getElementById("cart-total").textContent = money(0);
+    document.getElementById("show-checkout").hidden = true;
+  } catch (error) {
+    status.textContent = error.message || "Order save nahi ho saka. Please try again.";
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = "Place COD Order";
+  }
+});
+
 document.getElementById("cart-close").addEventListener("click", closeCart);
 cartOverlay.addEventListener("click", function(event) {
   if (event.target === cartOverlay) closeCart();
