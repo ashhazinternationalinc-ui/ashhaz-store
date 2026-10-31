@@ -1,451 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ashhaz International Inc | Premium Home Decor</title>
-<meta name="description" content="Discover beautiful home decor, jute planters, iron fruit baskets, candle holders, diyas and gardening products from Ashhaz International Inc, Moradabad, India.">
-<meta name="theme-color" content="#22272d">
-
-<style>
-:root {
-  --dark:#22272d;
-  --dark2:#343a42;
-  --gold:#c3a064;
-  --gold-light:#e8d3a4;
-  --cream:#f8f5ef;
-  --text:#292d32;
-  --muted:#686b70;
-  --border:#e7dfd2;
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:20px}
-body{margin:0;background:var(--cream);color:var(--text);font-family:Arial,Helvetica,sans-serif;line-height:1.6}
-a{color:inherit}
-img{max-width:100%}
-.topbar{background:#171b20;color:#e8d7b6;text-align:center;padding:7px 12px;font-size:11px;letter-spacing:2px}
-header{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:13px 5%;background:linear-gradient(120deg,var(--dark),var(--dark2));border-bottom:3px solid var(--gold)}
-.brand-logo img{display:block;width:auto;height:68px;max-width:190px;object-fit:contain}
-.header-right{display:flex;align-items:center;justify-content:flex-end;gap:20px;flex-wrap:wrap}
-nav{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
-nav a{color:#fff;text-decoration:none;font-size:14px;font-weight:600}
-nav a:hover{color:var(--gold-light)}
-.search{display:flex;overflow:hidden;border:1px solid #82714f;border-radius:5px}
-.search input{width:160px;min-width:0;padding:9px 10px;background:transparent;color:#fff;border:0;outline:none}
-.search input::placeholder{color:#ddd2bd}
-.search button{padding:8px 12px;border:0;background:var(--gold);cursor:pointer;font-weight:bold}
-.hero{min-height:420px;display:flex;align-items:center;padding:65px 8%;color:#fff;background:linear-gradient(90deg,rgba(25,28,31,.95),rgba(25,28,31,.77) 48%,rgba(25,28,31,.12)),url("https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1800&q=85") center/cover no-repeat}
-.hero-content{max-width:600px}
-.eyebrow{color:var(--gold-light);font-size:11px;font-weight:bold;letter-spacing:3px;text-transform:uppercase}
-.hero h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(38px,5vw,62px);font-weight:500;line-height:1.1;margin:12px 0 18px}
-.hero p{max-width:480px;color:#eeeae3;font-size:16px;line-height:1.8}
-.button{display:inline-block;margin-top:18px;padding:13px 23px;background:linear-gradient(135deg,#e0c17f,#bd934b);color:#20252b;border:1px solid #e7cc90;border-radius:4px;text-decoration:none;font-size:13px;font-weight:bold}
-.button:hover{filter:brightness(1.06);transform:translateY(-1px)}
-.benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding:22px 5%;background:#292e33;color:white;border-bottom:1px solid #4a4336}
-.benefit{display:flex;align-items:center;justify-content:center;gap:10px}
-.benefit-icon{font-size:25px;color:var(--gold-light)}
-.benefit strong{display:block;font-size:13px}
-.benefit small{display:block;color:#d0cfcb;font-size:11px}
-main{max-width:1320px;margin:auto;padding:40px 5%}
-.section{margin-bottom:43px;scroll-margin-top:20px}
-.section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:21px}
-.section-heading h2{margin:0;font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:clamp(25px,3vw,34px)}
-.gold-line{width:42px;height:2px;background:var(--gold)}
-.heading-left{display:flex;align-items:center;gap:13px}
-.text-link{font-size:12px;font-weight:bold;color:#80551d;text-decoration:none;white-space:nowrap}
-.category-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
-.category-card{overflow:hidden;background:#fff;border:1px solid var(--border);border-radius:5px;text-decoration:none;transition:transform .2s,box-shadow .2s}
-.category-card:hover{transform:translateY(-4px);box-shadow:0 10px 25px #00000012}
-.category-card img{display:block;width:100%;height:165px;object-fit:cover;background:#e8e0d3}
-.category-info{padding:13px 14px 17px}
-.category-info h3{font-size:15px;margin:0 0 5px}
-.category-info p{font-size:12px;color:var(--muted);margin:0}
-.product-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
-.product-card{min-width:0;overflow:hidden;padding:10px;background:#fff;border:1px solid var(--border);border-radius:6px;text-align:center;transition:transform .2s,box-shadow .2s}
-.product-card:hover{transform:translateY(-4px);box-shadow:0 10px 24px #00000012}
-.product-card img{display:block;width:100%;height:190px;object-fit:contain;background:#f6f2eb;border-radius:4px}
-.product-card h3{margin:12px 3px 5px;font-size:14px;line-height:1.4;overflow-wrap:anywhere}
-.product-price{margin:5px 0;color:#1e2227;font-size:19px;font-weight:bold}
-.product-stock{margin:4px 0 12px;color:var(--muted);font-size:12px}
-.product-button{display:block;padding:10px 5px;background:var(--dark);color:white;border:1px solid var(--gold);border-radius:4px;text-decoration:none;font-size:12px;font-weight:bold}
-.product-button:hover{background:#3a4048}
-.message{grid-column:1/-1;padding:22px;background:#fff;border:1px solid var(--border);border-radius:6px;color:var(--muted);text-align:center}
-.story-banner{min-height:300px;display:flex;align-items:center;padding:38px 6%;margin:5px 0 44px;color:white;background:linear-gradient(90deg,rgba(26,29,32,.96),rgba(26,29,32,.8) 48%,rgba(26,29,32,.08)),url("https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1600&q=85") center/cover no-repeat}
-.story-content{max-width:480px}
-.story-banner h2{font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:clamp(30px,4vw,43px);line-height:1.2;margin:10px 0}
-.story-banner p{font-size:14px;color:#eee9e0}
-#contact{padding:28px;background:#eee7db;border:1px solid #dfd1b9;border-radius:6px;scroll-margin-top:20px}
-#contact h2{font-family:Georgia,"Times New Roman",serif;font-weight:500;margin:0 0 12px}
-#contact p{margin:5px 0}
-footer{background:linear-gradient(120deg,#1c2024,#30353b);color:#f4f0e9;border-top:3px solid var(--gold)}
-.footer-main{max-width:1320px;margin:auto;padding:38px 5%;display:grid;grid-template-columns:1.4fr .8fr 1fr;gap:35px}
-.footer-logo{width:175px;height:65px;object-fit:contain;object-position:left center}
-.footer-about p,.footer-column p{font-size:13px;color:#d1d0cd}
-.footer-column h3{margin:0 0 12px;color:var(--gold-light);font-size:15px}
-.footer-column a{display:block;width:fit-content;margin:7px 0;color:#e7e3dc;font-size:13px;text-decoration:none}
-.footer-column a:hover{color:var(--gold-light)}
-.footer-bottom{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:15px 5%;border-top:1px solid #45484a;color:#c9c8c4;font-size:12px}
-@media(max-width:900px){
-  header{justify-content:center}
-  .header-right{justify-content:center}
-  .category-grid,.product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .benefits{grid-template-columns:repeat(2,1fr)}
-  .footer-main{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
-@media(max-width:560px){
-  .topbar{font-size:9px;letter-spacing:1px}
-  header{padding:14px;gap:13px}
-  .brand-logo img{height:55px;max-width:155px}
-  .header-right{width:100%;gap:13px}
-  nav{justify-content:center;gap:12px 17px}
-  nav a{font-size:13px}
-  .search{width:100%;max-width:340px}
-  .search input{flex:1;width:auto}
-  .hero{min-height:390px;padding:48px 22px;background-position:60% center}
-  .hero h1{font-size:39px}
-  .hero p{font-size:14px}
-  .benefits{padding:18px 12px;gap:18px 8px}
-  .benefit{justify-content:flex-start;gap:7px}
-  .benefit-icon{font-size:21px}
-  .benefit strong{font-size:11px}
-  .benefit small{font-size:10px}
-  main{padding:28px 14px}
-  .section-heading h2{font-size:24px}
-  .heading-left{gap:7px}
-  .gold-line{display:none}
-  .category-grid,.product-grid{gap:10px}
-  .category-card img{height:120px}
-  .category-info{padding:10px}
-  .category-info h3{font-size:13px}
-  .category-info p{font-size:11px}
-  .product-card{padding:7px}
-  .product-card img{height:145px}
-  .product-card h3{font-size:12px}
-  .product-price{font-size:16px}
-  .product-button{font-size:10px;padding:9px 3px}
-  .story-banner{min-height:300px;padding:25px 20px;background-position:60% center}
-  #contact{padding:21px}
-  .footer-main{grid-template-columns:1fr;gap:20px;padding:28px 20px}
-  .footer-bottom{padding:14px 20px}
-}
- .checkout-label{display:block;margin:12px 0 4px;font-size:13px;font-weight:bold}
-.checkout-input{display:block;width:100%;padding:10px;border:1px solid var(--border);border-radius:4px;background:#fff;font:inherit}
-#checkout-form{margin-top:18px;border-top:1px solid var(--border);padding-top:12px}
-#checkout-form[hidden]{display:none}
-#checkout-status{font-size:13px;color:var(--muted)}
- .cart-toggle{padding:9px 13px;background:var(--gold);color:#20252b;border:1px solid #e7cc90;border-radius:4px;font-weight:bold;cursor:pointer}
-.cart-overlay{display:none;position:fixed;inset:0;z-index:9998;background:#0009;padding:18px;align-items:center;justify-content:center}
-.cart-overlay.open{display:flex}
-.cart-panel{width:min(560px,100%);max-height:85vh;overflow:auto;background:#fff;border-radius:8px;padding:22px;box-shadow:0 15px 50px #0005}
-.cart-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--border);padding-bottom:12px}
-.cart-heading h2{margin:0;font-family:Georgia,serif;font-weight:500}
-.cart-close{border:0;background:var(--dark);color:#fff;border-radius:4px;padding:8px 12px;cursor:pointer}
-.cart-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--border)}
-.cart-item-name{font-weight:bold;font-size:14px}
-.cart-item-price{font-size:13px;color:var(--muted)}
-.cart-actions{display:flex;align-items:center;gap:7px}
-.cart-actions button{border:1px solid var(--border);background:#f8f5ef;border-radius:4px;padding:5px 9px;cursor:pointer}
-.cart-total{display:flex;justify-content:space-between;font-size:18px;font-weight:bold;padding:18px 0}
-.cart-empty{padding:25px 5px;text-align:center;color:var(--muted)}
-@media(max-width:560px){.cart-toggle{font-size:12px;padding:8px 10px}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
-</style>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script></head>
-
-<body>
-<div class="topbar">PREMIUM HOME DECOR · GARDENING · HANDCRAFTED DESIGNS</div>
-
-<header>
-  <a class="brand-logo" href="/#home" aria-label="Ashhaz home">
-    <img src="/logo.png" alt="Ashhaz International Inc Logo">
-  </a>
-  <div class="header-right">
-    <nav aria-label="Main navigation">
-      <a href="#home">Home</a>
-      <a href="#products">Products</a>
-      <a href="#contact">Contact</a>
-      <a href="#about">About</a>
-      <a href="/admin">Admin</a>
-    </nav>
-    <button class="cart-toggle" id="cart-toggle" type="button" aria-label="Open shopping cart">
-      🛒 Cart (<span id="cart-count">0</span>)
-    </button>
-    <form class="search" id="search-form" role="search">
-      <input id="product-search" type="search" placeholder="Search products..." aria-label="Search products">
-      <button type="submit" aria-label="Search">⌕</button>
-    </form>
-  </div>
-</header>
-
-<section class="hero" id="home">
-  <div class="hero-content">
-    <div class="eyebrow">Premium Home Decor &amp; Gardening</div>
-    <h1>Beautiful Products for Your Home &amp; Garden</h1>
-    <p>Discover elegant home decor, jute planters, iron baskets and handcrafted designs made to bring warmth to your space.</p>
-    <a class="button" href="#products">Explore Products &nbsp; →</a>
-  </div>
-</section>
-
-<section class="benefits" aria-label="Our highlights">
-  <div class="benefit"><span class="benefit-icon">✧</span><div><strong>Quality Designs</strong><small>Carefully selected products</small></div></div>
-  <div class="benefit"><span class="benefit-icon">♧</span><div><strong>Home &amp; Garden</strong><small>Made for your spaces</small></div></div>
-  <div class="benefit"><span class="benefit-icon">◇</span><div><strong>Elegant Style</strong><small>Timeless decorative pieces</small></div></div>
-  <div class="benefit"><span class="benefit-icon">✉</span><div><strong>Contact Our Team</strong><small>We are here to help</small></div></div>
-</section>
-
-<main>
-  <section class="section" id="categories">
-    <div class="section-heading">
-      <div class="heading-left"><h2>Our Product Categories</h2><span class="gold-line"></span></div>
-      <a class="text-link" href="#products">VIEW PRODUCTS →</a>
-    </div>
-
-    <div class="category-grid">
-      <a class="category-card" href="#products" data-category="jute">
-        <img src="https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=700&q=80" alt="Plants and planters" loading="lazy">
-        <div class="category-info"><h3>Jute Planters</h3><p>Decorative planters for home, balcony and garden.</p></div>
-      </a>
-      <a class="category-card" href="#products" data-category="fruit">
-        <img src="https://images.unsplash.com/photo-1543168256-418811576931?auto=format&fit=crop&w=700&q=80" alt="Fruit and home accessories" loading="lazy">
-        <div class="category-info"><h3>Fruit Baskets</h3><p>Stylish baskets for everyday use and gifting.</p></div>
-      </a>
-      <a class="category-card" href="#products" data-category="diya">
-        <img src="https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?auto=format&fit=crop&w=700&q=80" alt="Decorative candles" loading="lazy">
-        <div class="category-info"><h3>Candle Holders &amp; Diyas</h3><p>Decorative lighting for festive occasions.</p></div>
-      </a>
-      <a class="category-card" href="#products" data-category="decor">
-        <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=700&q=80" alt="Elegant home decor" loading="lazy">
-        <div class="category-info"><h3>Home Decor &amp; Furniture</h3><p>Beautiful designs for your living space.</p></div>
-      </a>
-    </div>
-  </section>
-
-  <section class="section" id="products">
-    <div class="section-heading">
-      <div class="heading-left"><h2>Our Products</h2><span class="gold-line"></span></div>
-      <a class="text-link" href="#products" id="view-all">VIEW ALL →</a>
-    </div>
-    <div class="product-grid" id="live-product-list" aria-live="polite">
-      <p class="message">Loading products...</p>
-    </div>
-  </section>
-
-  <section class="story-banner" id="about">
-    <div class="story-content">
-      <div class="eyebrow">Elevate Your Living Space</div>
-      <h2>Handcrafted Designs That Tell a Story</h2>
-      <p>Discover decorative pieces, planters and thoughtful designs for a more beautiful home.</p>
-      <a class="button" href="#categories">Discover Our Collection →</a>
-    </div>
-  </section>
-
-  <section id="contact">
-    <h2>Let's Make Your Space Beautiful</h2>
-    <p><strong>Ashhaz International Inc</strong></p>
-    <p>Moradabad, Uttar Pradesh, India</p>
-    <p>Explore our collection of home decor, gardening products and furniture.</p>
-  </section>
-</main>
-
-<div class="cart-overlay" id="cart-overlay" aria-hidden="true">
-  <section class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="cart-title">
-    <div class="cart-heading">
-      <h2 id="cart-title">Your Shopping Cart</h2>
-      <button class="cart-close" id="cart-close" type="button">Close</button>
-    </div>
-    <div id="cart-items"></div>
-    <div class="cart-total"><span>Total</span><span id="cart-total">₹0.00</span></div>
-    <button class="product-button" id="show-checkout" type="button">Proceed to Checkout</button>
-    <form id="checkout-form" hidden>
-      <h3>Delivery Details</h3>
-      <label class="checkout-label" for="customer-name">Full Name *</label>
-      <input class="checkout-input" id="customer-name" name="customer_name" autocomplete="name" required maxlength="150">
-      <label class="checkout-label" for="customer-mobile">Mobile Number *</label>
-      <input class="checkout-input" id="customer-mobile" name="mobile" type="tel" autocomplete="tel" required minlength="8" maxlength="20" pattern="[0-9+() -]{8,20}">
-      <label class="checkout-label" for="customer-address">Full Address *</label>
-      <textarea class="checkout-input" id="customer-address" name="address" autocomplete="street-address" required maxlength="1000" rows="3"></textarea>
-      <label class="checkout-label" for="customer-city">City</label>
-      <input class="checkout-input" id="customer-city" name="city" autocomplete="address-level2" maxlength="100">
-      <label class="checkout-label" for="customer-state">State</label>
-      <input class="checkout-input" id="customer-state" name="state" autocomplete="address-level1" maxlength="100">
-      <label class="checkout-label" for="customer-pincode">PIN Code</label>
-      <input class="checkout-input" id="customer-pincode" name="pincode" inputmode="numeric" autocomplete="postal-code" maxlength="12">
-      <p><strong>Payment Method:</strong> Cash on Delivery (COD)</p>
-      <button class="product-button" id="place-order" type="submit">Place COD Order</button>
-      <p id="checkout-status" role="status" aria-live="polite"></p>
-    </form>
-  </section>
-</div>
-
-<footer>
-  <div class="footer-main">
-    <div class="footer-about">
-      <a href="/#home"><img class="footer-logo" src="/logo.png" alt="Ashhaz International Inc"></a>
-      <p>Your destination for home decor, gardening planters, iron baskets and handcrafted designs.</p>
-    </div>
-    <div class="footer-column">
-      <h3>Quick Links</h3>
-      <a href="#home">Home</a>
-      <a href="#categories">Categories</a>
-      <a href="#products">Products</a>
-         <a href="#contact">Contact</a>
-      <a href="/admin">Admin</a>
-      <a href="/about-us.html">About Us</a>
-<a href="/return-refund-policy.html">Return & Refund Policy</a>
-<a href="/privacy-policy.html">Privacy Policy</a>
-<a href="/shipping-policy.html">Shipping & Delivery Policy</a>
-<a href="/terms-and-conditions.html">Terms & Conditions</a>
-<a href="/contact-us.html">Contact Us</a>
-    </div>
-    <div class="footer-column">
-      <h3>Contact Us</h3>
-      <p>Ashhaz International Inc</p>
-      <p>Moradabad, Uttar Pradesh, India</p>
-      <p>Mobile: <a href="tel:+919412244955">9412244955</a></p>
-<p>WhatsApp: <a href="https://wa.me/919412244955" target="_blank" rel="noopener">Chat on WhatsApp</a></p>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span>© 2026 Ashhaz International Inc. All rights reserved.</span>
-    <span>Designed for beautiful homes.</span>
-  </div>
-</footer>
-
-<script>
-const productBox = document.getElementById("live-product-list");
-const searchInput = document.getElementById("product-search");
-let allProducts = [];
-
-const cartOverlay = document.getElementById("cart-overlay");
-const cartItemsBox = document.getElementById("cart-items");
-const cartCount = document.getElementById("cart-count");
-
-function readCart() {
-  try {
-    const value = JSON.parse(localStorage.getItem("ashhaz_cart") || "[]");
-    return Array.isArray(value) ? value : [];
-  } catch (error) {
-    return [];
-  }
-}
-
-function saveCart(cart) {
-  localStorage.setItem("ashhaz_cart", JSON.stringify(cart));
-  updateCartDisplay();
-}
-
-function money(value) {
-  return "₹" + Number(value || 0).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
-}
-
-function updateCartDisplay() {
-  const cart = readCart();
-  const count = cart.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0);
-  cartCount.textContent = String(count);
-  cartItemsBox.replaceChildren();
-
-  if (!cart.length) {
-    const empty = document.createElement("p");
-    empty.className = "cart-empty";
-    empty.textContent = "Your cart is empty.";
-    cartItemsBox.appendChild(empty);
-  }
-
-  let total = 0;
-  cart.forEach(function(item, index) {
-    const quantity = Math.max(1, Number(item.quantity) || 1);
-    const price = Number(item.price) || 0;
-    total += price * quantity;
-
-    const row = document.createElement("div");
-    row.className = "cart-item";
-
-    const details = document.createElement("div");
-    const name = document.createElement("div");
-    name.className = "cart-item-name";
-    name.textContent = item.name || "Product";
-    const linePrice = document.createElement("div");
-    linePrice.className = "cart-item-price";
-    linePrice.textContent = money(price) + " each";
-    details.append(name, linePrice);
-
-    const actions = document.createElement("div");
-    actions.className = "cart-actions";
-
-    const minus = document.createElement("button");
-    minus.type = "button";
-    minus.textContent = "−";
-    minus.setAttribute("aria-label", "Decrease quantity");
-    minus.addEventListener("click", function() {
-      const latest = readCart();
-      if (!latest[index]) return;
-      latest[index].quantity = (Number(latest[index].quantity) || 1) - 1;
-      if (latest[index].quantity <= 0) latest.splice(index, 1);
-      saveCart(latest);
-    });
-
-    const qty = document.createElement("span");
-    qty.textContent = String(quantity);
-
-    const plus = document.createElement("button");
-    plus.type = "button";
-    plus.textContent = "+";
-    plus.setAttribute("aria-label", "Increase quantity");
-    plus.addEventListener("click", function() {
-      const latest = readCart();
-      if (!latest[index]) return;
-      latest[index].quantity = (Number(latest[index].quantity) || 1) + 1;
-      saveCart(latest);
-    });
-
-    const remove = document.createElement("button");
-    remove.type = "button";
-    remove.textContent = "Remove";
-    remove.addEventListener("click", function() {
-      const latest = readCart();
-      latest.splice(index, 1);
-      saveCart(latest);
-    });
-
-    actions.append(minus, qty, plus, remove);
-    row.append(details, actions);
-    cartItemsBox.appendChild(row);
-  });
-
-  document.getElementById("cart-total").textContent = money(total);
-}
-
-function openCart() {
-  updateCartDisplay();
-  cartOverlay.classList.add("open");
-  cartOverlay.setAttribute("aria-hidden", "false");
-}
-
-function closeCart() {
-  cartOverlay.classList.remove("open");
-  cartOverlay.setAttribute("aria-hidden", "true");
-}
-
-document.getElementById("cart-toggle").addEventListener("click", openCart);
-document.getElementById("show-checkout").addEventListener("click", function() {
-  const cart = readCart();
-  if (!cart.length) {
-    document.getElementById("checkout-status").textContent = "Your cart is empty.";
-    document.getElementById("checkout-form").hidden = false;
-    return;
-  }
-  document.getElementById("checkout-form").hidden = false;
-  document.getElementById("checkout-form").scrollIntoView({behavior:"smooth", block:"nearest"});
-});
 
 document.getElementById("checkout-form").addEventListener("submit", async function(event) {
   event.preventDefault();
+
   const cart = readCart();
   const status = document.getElementById("checkout-status");
   const submitButton = document.getElementById("place-order");
+
   if (!cart.length) {
     status.textContent = "Your cart is empty. Add a product first.";
     return;
@@ -453,6 +13,8 @@ document.getElementById("checkout-form").addEventListener("submit", async functi
 
   const form = event.currentTarget;
   if (!form.reportValidity()) return;
+
+  const paymentMethod = form.elements.payment_method.value;
 
   const payload = {
     customer_name: form.elements.customer_name.value.trim(),
@@ -462,7 +24,10 @@ document.getElementById("checkout-form").addEventListener("submit", async functi
     state: form.elements.state.value.trim(),
     pincode: form.elements.pincode.value.trim(),
     items: cart.map(function(item) {
-      return { product_id: Number(item.id), quantity: Number(item.quantity) };
+      return {
+        product_id: Number(item.id),
+        quantity: Number(item.quantity)
+      };
     })
   };
 
@@ -474,184 +39,171 @@ document.getElementById("checkout-form").addEventListener("submit", async functi
     return;
   }
 
-  submitButton.disabled = true;
-  submitButton.textContent = "Submitting order...";
-  status.textContent = "Your order is being saved. Please wait.";
-
-  try {
-    const response = await fetch("/api/orders", {
-      method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify(payload)
-    });
-    const result = await response.json().catch(function() { return {}; });
-    if (!response.ok || !result.ok) {
-      throw new Error(result.error || "Order save nahi ho saka. Please try again.");
-    }
-
+  function showOrderSuccess(orderNumber, total, paymentText) {
     localStorage.removeItem("ashhaz_cart");
     updateCartDisplay();
     form.reset();
     form.hidden = true;
     status.textContent = "";
+
     const success = document.createElement("p");
     success.className = "cart-empty";
-    success.textContent = "Order successfully placed! Order Number: " + result.order_number +
-      ". Total: " + money(result.total_amount) + ". Payment: Cash on Delivery.";
+    success.textContent =
+      "Order successfully placed! Order Number: " + orderNumber +
+      ". Total: " + money(total) + ". Payment: " + paymentText;
+
     cartItemsBox.replaceChildren(success);
     document.getElementById("cart-total").textContent = money(0);
     document.getElementById("show-checkout").hidden = true;
-  } catch (error) {
-    status.textContent = error.message || "Order save nahi ho saka. Please try again.";
-  } finally {
-    submitButton.disabled = false;
-    submitButton.textContent = "Place COD Order";
   }
-});
 
-document.getElementById("cart-close").addEventListener("click", closeCart);
-cartOverlay.addEventListener("click", function(event) {
-  if (event.target === cartOverlay) closeCart();
-});
-document.addEventListener("keydown", function(event) {
-  if (event.key === "Escape") closeCart();
-});
+  let paymentWindowOpened = false;
 
-function showMessage(message) {
-  productBox.replaceChildren();
-  const p = document.createElement("p");
-  p.className = "message";
-  p.textContent = message;
-  productBox.appendChild(p);
-}
+  submitButton.disabled = true;
+  submitButton.textContent = "Please wait...";
+  status.textContent = "Your order is being processed. Please wait.";
 
-function validImageUrl(value) {
-  if (typeof value !== "string") return "";
-  if (value.startsWith("/")) return value;
   try {
-    const url = new URL(value);
-    if (url.protocol === "https:" || url.protocol === "http:") return url.href;
-  } catch (e) {}
-  return "";
-}
+    // CASH ON DELIVERY
+    if (paymentMethod === "COD") {
+      submitButton.textContent = "Submitting COD order...";
 
-function renderProducts(products) {
-  productBox.replaceChildren();
-
-  if (!products.length) {
-    showMessage(allProducts.length ? "No products match your search." : "Products coming soon. Please check back soon.");
-    return;
-  }
-
-  products.forEach(function(product) {
-    const card = document.createElement("article");
-    card.className = "product-card";
-
-    const image = document.createElement("img");
-    image.alt = product.name || "Ashhaz product";
-    image.loading = "lazy";
-    image.src = validImageUrl(product.image_url) ||
-      "https://placehold.co/500x500/f2ede3/343a42?text=Ashhaz";
-    image.onerror = function() {
-      image.onerror = null;
-      image.src = "https://placehold.co/500x500/f2ede3/343a42?text=Ashhaz";
-    };
-
-    const name = document.createElement("h3");
-    name.textContent = product.name || "Product";
-
-    const price = document.createElement("p");
-    price.className = "product-price";
-    const amount = Number(product.price);
-    price.textContent = "₹" + (Number.isFinite(amount) ? amount : 0).toLocaleString("en-IN", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
-
-    const stock = document.createElement("p");
-    stock.className = "product-stock";
-    const quantity = Number(product.stock);
-    stock.textContent = "Stock: " + (Number.isFinite(quantity) ? quantity : 0);
-    const addToCart = document.createElement("button");
-    addToCart.className = "product-button";
-    addToCart.type = "button";
-    addToCart.textContent = "Add to Cart";
-    addToCart.addEventListener("click", function() {
-      const cart = readCart();
-      const existing = cart.find(function(item) {
-        return String(item.id) === String(product.id);
+      const response = await fetch("/api/orders", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload)
       });
 
-      if (existing) {
-        existing.quantity += 1;
-      } else {
-        cart.push({
-          id: product.id,
-          name: product.name,
-          price: Number(product.price) || 0,
-          quantity: 1
-        });
+      const result = await response.json().catch(function() {
+        return {};
+      });
+
+      if (!response.ok || !result.ok) {
+        throw new Error(result.error || "Order save nahi ho saka. Please try again.");
       }
 
-      saveCart(cart);
-      alert(product.name + " cart mein add ho gaya.");
-    });
+      showOrderSuccess(
+        result.order_number,
+        result.total_amount,
+        "Cash on Delivery"
+      );
 
-    card.append(image, name, price, stock, addToCart);
-    productBox.appendChild(card);
-  });
-}
+      return;
+    }
 
-function filterProducts() {
-  const query = searchInput.value.trim().toLowerCase();
-  renderProducts(allProducts.filter(function(product) {
-    return String(product.name || "").toLowerCase().includes(query) ||
-      String(product.description || "").toLowerCase().includes(query);
-  }));
-}
+    // RAZORPAY ONLINE PAYMENT
+    if (paymentMethod === "Razorpay") {
+      if (typeof window.Razorpay !== "function") {
+        throw new Error("Payment service load nahi hui. Page refresh karke dobara try karein.");
+      }
 
-async function loadProducts() {
-  try {
-    const response = await fetch("/api/products");
-    if (!response.ok) throw new Error("Product API unavailable");
-    const data = await response.json();
-    allProducts = Array.isArray(data.products) ? data.products : [];
-    filterProducts();
+      submitButton.textContent = "Creating payment...";
+
+      const response = await fetch("/api/create-payment-order", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload)
+      });
+
+      const paymentOrder = await response.json().catch(function() {
+        return {};
+      });
+
+      if (!response.ok || !paymentOrder.ok) {
+        throw new Error(paymentOrder.error || "Payment order create nahi ho saka.");
+      }
+
+      const options = {
+        key: paymentOrder.key_id,
+        amount: paymentOrder.amount,
+        currency: paymentOrder.currency,
+        name: "Ashhaz International Inc",
+        description: "Online Shopping Order",
+        order_id: paymentOrder.order_id,
+
+        prefill: {
+          name: payload.customer_name,
+          contact: payload.mobile
+        },
+
+        handler: async function(paymentResponse) {
+          submitButton.disabled = true;
+          submitButton.textContent = "Verifying payment...";
+          status.textContent = "Payment received. Verification ho rahi hai. Please wait.";
+
+          try {
+            const verifyResponse = await fetch("/api/verify-payment", {
+              method: "POST",
+              headers: {"Content-Type": "application/json"},
+              body: JSON.stringify({
+                razorpay_order_id: paymentResponse.razorpay_order_id,
+                razorpay_payment_id: paymentResponse.razorpay_payment_id,
+                razorpay_signature: paymentResponse.razorpay_signature
+              })
+            });
+
+            const verification = await verifyResponse.json().catch(function() {
+              return {};
+            });
+
+            if (!verifyResponse.ok || !verification.ok) {
+              throw new Error(
+                verification.error || "Payment verification nahi ho saki. Support se contact karein."
+              );
+            }
+
+            showOrderSuccess(
+              paymentOrder.order_number,
+              Number(paymentOrder.amount) / 100,
+              "Paid Online"
+            );
+
+          } catch (error) {
+            status.textContent = error.message ||
+              "Payment verification mein problem hui. Please contact support.";
+            submitButton.disabled = false;
+            submitButton.textContent = "Continue to Payment";
+          }
+        },
+
+        modal: {
+          ondismiss: function() {
+            status.textContent = "Payment window band ho gayi. Aap dobara payment try kar sakte hain.";
+            submitButton.disabled = false;
+            submitButton.textContent = "Continue to Payment";
+          }
+        },
+
+        theme: {
+          color: "#c3a064"
+        }
+      };
+
+      const razorpay = new window.Razorpay(options);
+
+      razorpay.on("payment.failed", function(paymentError) {
+        status.textContent =
+          paymentError.error?.description || "Payment failed. Please try again.";
+        submitButton.disabled = false;
+        submitButton.textContent = "Continue to Payment";
+      });
+
+      razorpay.open();
+      paymentWindowOpened = true;
+      status.textContent = "Razorpay window mein payment complete karein.";
+
+      return;
+    }
+
+    throw new Error("Please select a valid payment method.");
+
   } catch (error) {
-    console.error("Product loading error:", error);
-    showMessage("Products could not be loaded right now. Please refresh later.");
+    status.textContent = error.message || "Order process nahi ho saka. Please try again.";
+
+  } finally {
+    if (!paymentWindowOpened) {
+      submitButton.disabled = false;
+      submitButton.textContent = "Continue to Payment";
+    }
   }
-}
-
-document.getElementById("search-form").addEventListener("submit", function(event) {
-  event.preventDefault();
-  filterProducts();
-  document.getElementById("products").scrollIntoView({behavior:"smooth"});
 });
-
-searchInput.addEventListener("input", filterProducts);
-
-document.getElementById("view-all").addEventListener("click", function() {
-  searchInput.value = "";
-  filterProducts();
-});
-
-document.querySelectorAll("[data-category]").forEach(function(category) {
-  category.addEventListener("click", function() {
-    const term = category.dataset.category;
-    const terms = {
-      jute: "jute",
-      fruit: "fruit",
-      diya: "diya",
-      decor: "decor"
-    };
-    searchInput.value = terms[term] || "";
-    filterProducts();
-  });
-});
-
-updateCartDisplay();
-loadProducts();
-</script>
-</body>
-</html>
