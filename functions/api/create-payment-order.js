@@ -4,7 +4,11 @@ export async function onRequestPost({ request, env }) {
 
   try {
     if (!env.DB || !env.RAZORPAY_KEY_ID || !env.RAZORPAY_KEY_SECRET) {
-      return Response.json({ error: "Payment service is not configured." }, { status: 500 });
+      console.error("Payment configuration missing");
+      return Response.json(
+        { error: "Payment service is not configured." },
+        { status: 500 }
+      );
     }
 
     const data = await request.json();
@@ -15,7 +19,10 @@ export async function onRequestPost({ request, env }) {
       typeof data.address !== "string" || !data.address.trim() ||
       !Array.isArray(data.items) || data.items.length < 1 || data.items.length > 50
     ) {
-      return Response.json({ error: "Valid customer details and order items are required." }, { status: 400 });
+      return Response.json(
+        { error: "Valid customer details and order items are required." },
+        { status: 400 }
+      );
     }
 
     const itemsMap = new Map();
@@ -50,7 +57,10 @@ export async function onRequestPost({ request, env }) {
       }
 
       if (Number(product.stock) < combinedQty) {
-        return Response.json({ error: `Not enough stock for ${product.name}.` }, { status: 400 });
+        return Response.json(
+          { error: `Not enough stock for ${product.name}.` },
+          { status: 400 }
+        );
       }
 
       itemsMap.set(id, { product, qty: combinedQty });
@@ -76,26 +86,56 @@ export async function onRequestPost({ request, env }) {
       return Response.json({ error: "Invalid payment amount." }, { status: 400 });
     }
 
-    const credentials = btoa(`${env.RAZORPAY_KEY_ID}:${env.RAZORPAY_KEY_SECRET}`);
+    const credentials = btoa(
+      `${env.RAZORPAY_KEY_ID}:${env.RAZORPAY_KEY_SECRET}`
+    );
+
     const orderNumber = `ASH${Date.now()}${crypto.randomUUID().slice(0, 8)}`;
 
-    const paymentResponse = await fetch("https://api.razorpay.com/v1/orders", {
-      method: "POST",
-      headers: {
-        Authorization: `Basic ${credentials}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        amount: amountInPaise,
-        currency: "INR",
-        receipt: orderNumber
-      })
-    });
+    const paymentResponse = await fetch(
+      "https://api.razorpay.com/v1/orders",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Basic ${credentials}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          amount: amountInPaise,
+          currency: "INR",
+          receipt: orderNumber
+        })
+      }
+    );
 
-    const payment = await paymentResponse.json();
+    const paymentText = await paymentResponse.text();
+    let payment;
+
+    try {
+      payment = JSON.parse(paymentText);
+    } catch {
+      console.error("Razorpay returned non-JSON response", {
+        status: paymentResponse.status
+      });
+
+      return Response.json(
+        { error: "Payment provider returned an invalid response." },
+        { status: 502 }
+      );
+    }
 
     if (!paymentResponse.ok || !payment.id || payment.amount !== amountInPaise) {
-      return Response.json({ error: "Razorpay could not create payment order." }, { status: 502 });
+      console.error("Razorpay order creation failed", {
+        httpStatus: paymentResponse.status,
+        errorCode: payment.error?.code || "UNKNOWN",
+        errorDescription: payment.error?.description || "No description",
+        errorReason: payment.error?.reason || "Not provided"
+      });
+
+      return Response.json(
+        { error: "Razorpay could not create payment order." },
+        { status: 502 }
+      );
     }
 
     const insert = await env.DB.prepare(
@@ -118,7 +158,7 @@ export async function onRequestPost({ request, env }) {
     savedOrderId = insert.meta?.last_row_id;
 
     if (!insert.success || !savedOrderId) {
-      return Response.json({ error: "Could not save order." }, { status: 500 });
+      throw new Error("Could not save payment order in database.");
     }
 
     const statements = items.map(item =>
@@ -147,16 +187,21 @@ export async function onRequestPost({ request, env }) {
     });
 
   } catch (error) {
+    console.error("Create payment order failed:", error?.message || "Unknown error");
+
     if (savedOrderId) {
       try {
         await env.DB.prepare(
           "DELETE FROM orders WHERE id = ? AND payment_status = 'Pending'"
         ).bind(savedOrderId).run();
-      } catch {
-        // Leave the order for manual review if cleanup fails.
+      } catch (cleanupError) {
+        console.error("Pending order cleanup failed:", cleanupError?.message);
       }
     }
 
-    return Response.json({ error: "Unable to create payment order." }, { status: 500 });
+    return Response.json(
+      { error: "Unable to create payment order. Please try again." },
+      { status: 500 }
+    );
   }
 }
