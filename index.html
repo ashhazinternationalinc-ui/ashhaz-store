@@ -561,8 +561,8 @@ document.getElementById("checkout-form").addEventListener("submit", async functi
       currency: paymentOrder.currency,
       name: "Ashhaz International Inc",
       description: "Website Order Payment",
-      order_id: paymentOrder.razorpay_order_id,
-      prefill: {
+      order_id: paymentOrder.order_id,
+      prefill: {paymentOrder.order_id
         name: payload.customer_name,
         contact: payload.mobile
       },
@@ -577,7 +577,7 @@ document.getElementById("checkout-form").addEventListener("submit", async functi
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
-              razorpay_order_id: paymentOrder.razorpay_order_id,
+              razorpay_order_id: paymentOrder.order_id,
               razorpay_payment_id: paymentResponse.razorpay_payment_id,
               razorpay_signature: paymentResponse.razorpay_signature
             })
