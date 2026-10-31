@@ -270,8 +270,12 @@ footer{background:linear-gradient(120deg,#1c2024,#30353b);color:#f4f0e9;border-t
       <input class="checkout-input" id="customer-state" name="state" autocomplete="address-level1" maxlength="100">
       <label class="checkout-label" for="customer-pincode">PIN Code</label>
       <input class="checkout-input" id="customer-pincode" name="pincode" inputmode="numeric" autocomplete="postal-code" maxlength="12">
-      <p><strong>Payment Method:</strong> Cash on Delivery (COD)</p>
-      <button class="product-button" id="place-order" type="submit">Place COD Order</button>
+    <label class="checkout-label" for="payment-method">Payment Method *</label>
+<select class="checkout-input" id="payment-method" name="payment_method" required>
+  <option value="COD">Cash on Delivery (COD)</option>
+  <option value="Razorpay">Pay Online (UPI / Card / Net Banking)</option>
+</select>
+      <button class="product-button" id="place-order" type="submit">Continue to Payment</button>
       <p id="checkout-status" role="status" aria-live="polite"></p>
     </form>
   </section>
@@ -441,17 +445,20 @@ document.getElementById("show-checkout").addEventListener("click", function() {
   document.getElementById("checkout-form").scrollIntoView({behavior:"smooth", block:"nearest"});
 });
 
+
 document.getElementById("checkout-form").addEventListener("submit", async function(event) {
   event.preventDefault();
+
   const cart = readCart();
   const status = document.getElementById("checkout-status");
   const submitButton = document.getElementById("place-order");
+  const form = event.currentTarget;
+
   if (!cart.length) {
     status.textContent = "Your cart is empty. Add a product first.";
     return;
   }
 
-  const form = event.currentTarget;
   if (!form.reportValidity()) return;
 
   const payload = {
@@ -462,52 +469,155 @@ document.getElementById("checkout-form").addEventListener("submit", async functi
     state: form.elements.state.value.trim(),
     pincode: form.elements.pincode.value.trim(),
     items: cart.map(function(item) {
-      return { product_id: Number(item.id), quantity: Number(item.quantity) };
+      return {
+        product_id: Number(item.id),
+        quantity: Number(item.quantity)
+      };
     })
   };
 
   if (payload.items.some(function(item) {
-    return !Number.isInteger(item.product_id) || item.product_id < 1 ||
-      !Number.isInteger(item.quantity) || item.quantity < 1;
+    return !Number.isInteger(item.product_id) ||
+      item.product_id < 1 ||
+      !Number.isInteger(item.quantity) ||
+      item.quantity < 1;
   })) {
-    status.textContent = "Cart mein product details sahi nahi hain. Please refresh karke dobara try karein.";
+    status.textContent = "Cart product details are invalid. Please refresh.";
     return;
   }
 
+  const paymentMethod = document.getElementById("payment-method").value;
+
   submitButton.disabled = true;
-  submitButton.textContent = "Submitting order...";
-  status.textContent = "Your order is being saved. Please wait.";
+  submitButton.textContent = "Please wait...";
 
-  try {
-    const response = await fetch("/api/orders", {
-      method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify(payload)
-    });
-    const result = await response.json().catch(function() { return {}; });
-    if (!response.ok || !result.ok) {
-      throw new Error(result.error || "Order save nahi ho saka. Please try again.");
-    }
-
+  function showOrderSuccess(orderNumber, total, paymentText) {
     localStorage.removeItem("ashhaz_cart");
     updateCartDisplay();
     form.reset();
     form.hidden = true;
     status.textContent = "";
+
     const success = document.createElement("p");
     success.className = "cart-empty";
-    success.textContent = "Order successfully placed! Order Number: " + result.order_number +
-      ". Total: " + money(result.total_amount) + ". Payment: Cash on Delivery.";
+    success.textContent =
+      "Order successfully placed! Order Number: " + orderNumber +
+      ". Total: " + money(total) + ". Payment: " + paymentText + ".";
+
     cartItemsBox.replaceChildren(success);
     document.getElementById("cart-total").textContent = money(0);
     document.getElementById("show-checkout").hidden = true;
+  }
+
+  try {
+    if (paymentMethod === "COD") {
+      status.textContent = "Your COD order is being saved...";
+
+      const response = await fetch("/api/orders", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json().catch(function() {
+        return {};
+      });
+
+      if (!response.ok || !result.ok) {
+        throw new Error(result.error || "Order save nahi ho saka. Please try again.");
+      }
+
+      showOrderSuccess(result.order_number, result.total_amount, "Cash on Delivery");
+      return;
+    }
+
+    if (paymentMethod !== "Razorpay") {
+      throw new Error("Please select a valid payment method.");
+    }
+
+    status.textContent = "Creating secure payment order...";
+
+    const createResponse = await fetch("/api/create-payment-order", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(payload)
+    });
+
+    const paymentOrder = await createResponse.json().catch(function() {
+      return {};
+    });
+
+    if (!createResponse.ok || !paymentOrder.ok) {
+      throw new Error(paymentOrder.error || "Payment order could not be created.");
+    }
+
+    if (!window.Razorpay) {
+      throw new Error("Razorpay checkout did not load. Please refresh the page.");
+    }
+
+    const options = {
+      key: paymentOrder.key_id,
+      amount: paymentOrder.amount,
+      currency: paymentOrder.currency,
+      name: "Ashhaz International Inc",
+      description: "Website Order Payment",
+      order_id: paymentOrder.razorpay_order_id,
+      prefill: {
+        name: payload.customer_name,
+        contact: payload.mobile
+      },
+      theme: {
+        color: "#c3a064"
+      },
+      handler: async function(paymentResponse) {
+        status.textContent = "Payment received. Verifying securely...";
+
+        try {
+          const verifyResponse = await fetch("/api/verify-payment", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+              order_id: paymentOrder.razorpay_order_id,
+              razorpay_payment_id: paymentResponse.razorpay_payment_id,
+              razorpay_signature: paymentResponse.razorpay_signature
+            })
+          });
+
+          const verified = await verifyResponse.json().catch(function() {
+            return {};
+          });
+
+          if (!verifyResponse.ok || !verified.ok) {
+            throw new Error(verified.error || "Payment verification failed. Contact support.");
+          }
+
+          showOrderSuccess(
+            paymentOrder.order_number,
+            paymentOrder.total_amount,
+            "Online Payment Successful"
+          );
+        } catch (error) {
+          status.textContent = error.message || "Payment verification failed. Please contact support.";
+        }
+      }
+    };
+
+    const razorpay = new Razorpay(options);
+
+    razorpay.on("payment.failed", function() {
+      status.textContent = "Payment was not completed. Your cart is still saved. You can try again.";
+    });
+
+    razorpay.open();
+
   } catch (error) {
-    status.textContent = error.message || "Order save nahi ho saka. Please try again.";
+    status.textContent = error.message || "Order could not be processed. Please try again.";
   } finally {
     submitButton.disabled = false;
-    submitButton.textContent = "Place COD Order";
+    submitButton.textContent = "Continue to Payment";
   }
 });
+
 
 document.getElementById("cart-close").addEventListener("click", closeCart);
 cartOverlay.addEventListener("click", function(event) {
