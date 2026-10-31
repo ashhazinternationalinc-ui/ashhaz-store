@@ -577,7 +577,7 @@ document.getElementById("checkout-form").addEventListener("submit", async functi
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
-              order_id: paymentOrder.razorpay_order_id,
+              razorpay_order_id: paymentOrder.razorpay_order_id,
               razorpay_payment_id: paymentResponse.razorpay_payment_id,
               razorpay_signature: paymentResponse.razorpay_signature
             })
