@@ -1,221 +1,108 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ashhaz Admin Dashboard</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ashhaz Store — Admin</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f4f5f7;color:#222}
-header{background:#20251f;color:white;padding:20px 5%;display:flex;justify-content:space-between;align-items:center}
-main{max-width:1200px;margin:25px auto;padding:0 16px}
-button{border:0;border-radius:6px;padding:10px 14px;background:#a77d36;color:white;cursor:pointer;font-weight:bold;margin:3px}
-button:hover{opacity:.85}
-nav{margin-bottom:18px}
-nav button{background:white;color:#222;border:1px solid #ddd}
-nav button.active{background:#a77d36;color:white}
-.panel,.stat{background:white;border-radius:10px;padding:18px;margin-bottom:18px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
-.stat span{color:#666;font-size:13px}
-.stat strong{display:block;font-size:25px;margin-top:8px}
-table{border-collapse:collapse;width:100%;min-width:750px}
-th,td{padding:11px;border-bottom:1px solid #eee;text-align:left;font-size:14px}
-th{background:#f8f6f1}
-.table-wrap{overflow-x:auto;margin-top:15px}
-input,textarea{width:100%;padding:10px;border:1px solid #ccc;border-radius:5px;margin:5px 0 12px}
-label{font-size:13px;font-weight:bold}
-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
-.field{display:flex;flex-direction:column}
-.full{grid-column:1/-1}
-.hidden{display:none}
-#message{padding:10px 0;overflow-wrap:anywhere}
-.danger{background:#b83232}
-.secondary{background:#555}
-.small{font-size:13px;color:#666}
+:root{--ink:#25251f;--gold:#b18a4b;--bg:#f5f4f0;--line:#e8e4dc;--muted:#77766f;--green:#24543d;--red:#a33b32}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px Arial,sans-serif}
+header{background:#20231f;color:white;padding:16px max(18px,calc((100% - 1400px)/2));display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header h1{font-size:20px;margin:0}header small{color:#d5c6a8}
+button,input,select,textarea{font:inherit}button{border:0;border-radius:6px;padding:10px 13px;background:var(--gold);color:#fff;font-weight:600;cursor:pointer}button:disabled{opacity:.55;cursor:wait}
+button.secondary{background:#5c625b}button.danger{background:var(--red)}button.light{background:#eee9df;color:#333}
+main{max-width:1400px;margin:22px auto;padding:0 16px}.notice{padding:10px 12px;border-radius:7px;background:#fff8e9;border:1px solid #ead9b5;color:#6a552d;margin-bottom:15px}
+#message{min-height:22px;color:var(--green);margin:8px 0}#message.error{color:var(--red)}
+nav{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}nav button{background:white;color:#333;border:1px solid var(--line)}nav button.active{background:var(--gold);color:white;border-color:var(--gold)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}.stat,.panel{background:white;border:1px solid var(--line);border-radius:10px;padding:16px}.stat span{display:block;color:var(--muted);font-size:12px}.stat strong{display:block;font-size:25px;margin-top:7px}.panel{margin-bottom:16px}.panel h2{font-size:18px;margin:0 0 14px}
+.toolbar{display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin:12px 0}.field{display:flex;flex-direction:column;gap:5px;min-width:150px;flex:1}.field label{font-size:12px;font-weight:bold;color:#5d5b54}
+input,select,textarea{border:1px solid #d6d2c9;border-radius:6px;padding:10px;background:white;min-width:0;width:100%}
+.formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}.full{grid-column:1/-1}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:7px}table{width:100%;border-collapse:collapse;min-width:850px}th,td{text-align:left;padding:10px;border-bottom:1px solid #eee;font-size:13px;vertical-align:top}th{background:#f7f5f0;position:sticky;top:0}tr:last-child td{border-bottom:0}.actions{display:flex;gap:5px;flex-wrap:wrap}.actions button{padding:7px 9px;font-size:12px}
+.hidden{display:none!important}.pill{display:inline-block;padding:4px 7px;border-radius:20px;background:#eee9df;font-size:11px}.low{color:var(--red);font-weight:bold}.muted{color:var(--muted)}.empty{padding:24px;text-align:center;color:var(--muted)}
+#orderDetail{white-space:normal;line-height:1.6}.detailgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+@media(max-width:600px){header{align-items:flex-start}main{padding:0 10px}.stat strong{font-size:21px}.panel{padding:12px}}
 </style>
 </head>
 <body>
-<header>
-<h2>Ashhaz Store — Admin</h2>
-<button id="logoutBtn">Logout</button>
-</header>
+<header><div><h1>Ashhaz International Inc</h1><small>Store Administration</small></div><div><button class="secondary" id="refreshAll">Refresh</button> <button class="danger" id="logoutBtn">Logout</button></div></header>
 <main>
-<div id="message">Loading dashboard...</div>
-
-<div class="stats">
-<div class="stat"><span>Active Products</span><strong id="productCount">—</strong></div>
-<div class="stat"><span>Orders</span><strong id="orderCount">—</strong></div>
-</div>
-
+<div class="notice">Admin access is protected by your Cloudflare login session. Order status changes are saved to the database. Stock quantities can be adjusted from Products. Cancel/Return status does not automatically add stock back; inspect returned goods before updating inventory.</div>
+<div id="message" role="status">Loading your store…</div>
+<section class="stats" id="stats">
+<div class="stat"><span>Active Products</span><strong id="sProducts">—</strong></div><div class="stat"><span>Orders (all loaded)</span><strong id="sOrders">—</strong></div><div class="stat"><span>Sales (Paid + COD)</span><strong id="sSales">—</strong></div><div class="stat"><span>Online Paid</span><strong id="sPaid">—</strong></div><div class="stat"><span>COD Pending</span><strong id="sCod">—</strong></div><div class="stat"><span>Low Stock (≤5)</span><strong id="sLow">—</strong></div>
+</section>
 <nav>
-<button class="active" data-tab="products">Products</button>
-<button data-tab="add">Add Product</button>
-<button data-tab="orders">Orders</button>
+<button class="active" data-tab="orders">Orders</button><button data-tab="products">Products & Stock</button><button data-tab="customers">Customers</button><button data-tab="reports">Reports</button>
 </nav>
-
-<section class="panel" id="products">
-<h2>Products</h2>
-<button onclick="loadProducts()">Refresh Products</button>
-<div class="table-wrap">
-<table>
-<thead><tr><th>ID</th><th>SKU</th><th>Name</th><th>Price</th><th>Stock</th><th>Category</th><th>Actions</th></tr></thead>
-<tbody id="productRows"></tbody>
-</table>
+<section class="panel" id="tab-orders">
+<h2>Order Management</h2>
+<div class="toolbar">
+<div class="field"><label>Search order / customer / mobile</label><input id="orderSearch" placeholder="Order number, name or mobile"></div>
+<div class="field"><label>Order status</label><select id="orderStatusFilter"><option value="">All statuses</option><option>New</option><option>Processing</option><option>Shipped</option><option>Delivered</option><option>Cancelled</option><option>Returned</option><option>Pending Payment</option></select></div>
+<div class="field"><label>Payment</label><select id="paymentFilter"><option value="">All payments</option><option>Paid</option><option>Pending</option><option>Failed</option></select></div>
+<button id="exportOrders" class="light">Export CSV</button><button id="reloadOrders">Refresh Orders</button>
 </div>
+<div class="table-wrap"><table><thead><tr><th>Order No. / Date</th><th>Customer</th><th>Address</th><th>Total</th><th>Payment</th><th>Order Status</th><th>Actions</th></tr></thead><tbody id="orderRows"></tbody></table></div>
+<p class="muted">Latest 500 orders are loaded. Select View for item details and Update to save order status.</p>
 </section>
-
-<section class="panel hidden" id="add">
-<h2 id="formTitle">Add Product</h2>
-<form id="productForm">
+<section class="panel hidden" id="tab-products">
+<h2>Products & Inventory</h2>
+<div class="toolbar"><div class="field"><label>Search product / SKU</label><input id="productSearch" placeholder="Search…"></div><button id="addProductBtn">Add Product</button><button id="reloadProducts" class="light">Refresh</button></div>
+<div class="table-wrap"><table><thead><tr><th>ID / SKU</th><th>Product</th><th>Price</th><th>Stock</th><th>Category</th><th>Actions</th></tr></thead><tbody id="productRows"></tbody></table></div>
+<div id="productEditor" class="panel hidden" style="margin-top:16px">
+<h2 id="productEditorTitle">Add Product</h2>
+<form id="productForm" class="formgrid">
 <input type="hidden" name="id">
-<div class="field"><label>Product Name *</label><input name="name" required></div>
-<div class="field"><label>SKU</label><input name="sku"></div>
-<div class="field"><label>Price (₹) *</label><input name="price" type="number" min="0" step="0.01" required></div>
-<div class="field"><label>Stock *</label><input name="stock" type="number" min="0" step="1" required></div>
-<div class="field"><label>Category</label><input name="category"></div>
-<div class="field"><label>Image URL</label><input name="image_url" type="url"></div>
+<div class="field"><label>Product name *</label><input name="name" required maxlength="250"></div><div class="field"><label>SKU</label><input name="sku" maxlength="100"></div>
+<div class="field"><label>Price (₹) *</label><input name="price" type="number" min="0" step="0.01" required></div><div class="field"><label>Stock quantity *</label><input name="stock" type="number" min="0" step="1" required></div>
+<div class="field"><label>Category</label><input name="category"></div><div class="field"><label>Image URL</label><input name="image_url" type="url"></div>
 <div class="field full"><label>Description</label><textarea name="description" rows="3"></textarea></div>
-<div class="field full">
-<div>
-<button type="submit" id="saveBtn">Save Product</button>
-<button type="button" class="secondary" onclick="resetForm()">Clear Form</button>
-</div>
-</div>
-</form>
+<div class="field full"><label><input type="checkbox" name="active" checked style="width:auto"> Product active / visible in store</label></div>
+<div class="full"><button type="submit" id="saveProduct">Save Product</button> <button type="button" class="secondary" id="cancelProduct">Cancel</button></div>
+</form></div>
 </section>
-
-<section class="panel hidden" id="orders">
-<h2>Orders</h2>
-<button onclick="loadOrders()">Refresh Orders</button>
-<div class="table-wrap">
-<table>
-<thead><tr><th>Order No.</th><th>Customer</th><th>Mobile</th><th>Address</th><th>Total</th><th>Payment</th><th>Status</th><th>Date</th></tr></thead>
-<tbody id="orderRows"></tbody>
-</table>
-</div>
+<section class="panel hidden" id="tab-customers">
+<h2>Customers</h2><div class="toolbar"><div class="field"><label>Search customer</label><input id="customerSearch" placeholder="Name or mobile"></div></div>
+<div class="table-wrap"><table><thead><tr><th>Customer</th><th>Mobile</th><th>Orders</th><th>Total Order Value</th><th>Last Order</th></tr></thead><tbody id="customerRows"></tbody></table></div>
 </section>
+<section class="panel hidden" id="tab-reports">
+<h2>Sales & Order Reports</h2>
+<div class="toolbar"><div class="field"><label>From date</label><input type="date" id="reportFrom"></div><div class="field"><label>To date</label><input type="date" id="reportTo"></div><button id="applyReport">Apply</button><button id="exportReport" class="light">Export CSV</button></div>
+<div class="stats"><div class="stat"><span>Orders in date range</span><strong id="rOrders">—</strong></div><div class="stat"><span>Paid online amount</span><strong id="rOnline">—</strong></div><div class="stat"><span>COD order amount</span><strong id="rCod">—</strong></div><div class="stat"><span>Delivered orders</span><strong id="rDelivered">—</strong></div></div>
+<div class="table-wrap"><table><thead><tr><th>Payment Method</th><th>Payment Status</th><th>Orders</th><th>Order Value</th></tr></thead><tbody id="reportRows"></tbody></table></div>
+<p class="muted">Reports use the latest 500 orders returned by the API. This is order-value reporting, not accounting profit or GST reconciliation.</p>
+</section>
+<section class="panel hidden" id="detailPanel"><div class="toolbar" style="justify-content:space-between"><h2>Order Details</h2><button class="secondary" id="closeDetail">Close</button></div><div id="orderDetail"></div></section>
 </main>
-
 <script>
-const message=document.getElementById("message");
-function say(t){message.textContent=t;}
-
-async function api(url,options={}){
- const response=await fetch(url,{credentials:"same-origin",...options});
- const data=await response.json().catch(()=>({}));
- if(response.status===401){
-   window.location.href="/admin.html";
-   throw new Error("Login required. Please sign in again.");
- }
- if(!response.ok)throw new Error(data.error||"Request failed: "+response.status);
- return data;
-}
-
-document.querySelectorAll("[data-tab]").forEach(btn=>{
- btn.addEventListener("click",()=>{
-  document.querySelectorAll("[data-tab]").forEach(b=>b.classList.toggle("active",b===btn));
-  document.querySelectorAll("main > section").forEach(s=>s.classList.toggle("hidden",s.id!==btn.dataset.tab));
- });
-});
-
-function addCell(tr,value){
- const td=document.createElement("td");
- td.textContent=value==null?"":String(value);
- tr.appendChild(td);
-}
-
-async function loadProducts(){
- try{
-  const data=await api("/api/products");
-  const rows=document.getElementById("productRows");
-  rows.replaceChildren();
-  (data.products||[]).forEach(p=>{
-   const tr=document.createElement("tr");
-   [p.id,p.sku,p.name,"₹"+Number(p.price||0).toLocaleString("en-IN"),p.stock,p.category].forEach(v=>addCell(tr,v));
-   const actions=document.createElement("td");
-   const edit=document.createElement("button");
-   edit.textContent="Edit";
-   edit.addEventListener("click",()=>editProduct(p));
-   actions.appendChild(edit);
-   const del=document.createElement("button");
-   del.textContent="Delete";
-   del.className="danger";
-   del.addEventListener("click",()=>deleteProduct(p));
-   actions.appendChild(del);
-   tr.appendChild(actions);
-   rows.appendChild(tr);
-  });
-  document.getElementById("productCount").textContent=(data.products||[]).length;
-  say("Products loaded.");
- }catch(e){say("Products error: "+e.message);}
-}
-
-function editProduct(p){
- const f=document.getElementById("productForm");
- Object.keys(p).forEach(k=>{if(f.elements[k])f.elements[k].value=p[k]??"";});
- document.getElementById("formTitle").textContent="Edit Product #"+p.id;
- document.getElementById("saveBtn").textContent="Update Product";
- document.querySelector('[data-tab="add"]').click();
- say("Edit the fields and click Update Product.");
-}
-
-function resetForm(){
- const f=document.getElementById("productForm");
- f.reset();
- f.elements.id.value="";
- document.getElementById("formTitle").textContent="Add Product";
- document.getElementById("saveBtn").textContent="Save Product";
-}
-
-async function deleteProduct(p){
- if(!confirm("Delete product '"+p.name+"'? It will be hidden from the store."))return;
- try{
-  await api("/api/products?id="+encodeURIComponent(p.id),{method:"DELETE"});
-  say("Product deleted/hidden.");
-  await loadProducts();
- }catch(e){say("Delete failed: "+e.message);}
-}
-
-document.getElementById("productForm").addEventListener("submit",async e=>{
- e.preventDefault();
- const f=e.currentTarget;
- const payload=Object.fromEntries(new FormData(f).entries());
- const editing=Boolean(payload.id);
- payload.price=Number(payload.price);
- payload.stock=Number(payload.stock);
- if(editing)payload.id=Number(payload.id);
- try{
-  await api("/api/products",{method:editing?"PUT":"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
-  say(editing?"Product updated successfully.":"Product added successfully.");
-  resetForm();
-  await loadProducts();
-  document.querySelector('[data-tab="products"]').click();
- }catch(err){say("Save failed: "+err.message);}
-});
-
-async function loadOrders(){
- try{
-  const data=await api("/api/orders");
-  const rows=document.getElementById("orderRows");
-  rows.replaceChildren();
-  (data.orders||[]).forEach(o=>{
-   const tr=document.createElement("tr");
-   [o.order_number,o.customer_name,o.mobile,[o.address,o.city,o.state,o.pincode].filter(Boolean).join(", "),"₹"+Number(o.total_amount||0).toLocaleString("en-IN"),[o.payment_method,o.payment_status].filter(Boolean).join(" / "),o.order_status,new Date(o.created_at.endsWith("Z") ? o.created_at : o.created_at.replace(" ", "T") + "Z").toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })].forEach(v=>addCell(tr,v));
-   rows.appendChild(tr);
-  });
-  document.getElementById("orderCount").textContent=(data.orders||[]).length;
-  say("Orders loaded.");
- }catch(e){say("Orders error: "+e.message);}
-}
-
-document.getElementById("logoutBtn").addEventListener("click",async()=>{
- try{await fetch("/api/logout",{method:"POST",credentials:"same-origin"});}
- finally{window.location.href="/admin.html";}
-});
-
-loadProducts();
-loadOrders();
+const $=id=>document.getElementById(id);
+let orders=[],products=[],activeOrder=null;
+const money=n=>"₹"+Number(n||0).toLocaleString("en-IN",{maximumFractionDigits:2});
+function say(t,error=false){$("message").textContent=t;$("message").classList.toggle("error",error)}
+function safeDate(v){if(!v)return "—";const d=new Date(String(v).includes("Z")?v:String(v).replace(" ","T")+"Z");return isNaN(d)?"—":d.toLocaleString("en-IN",{timeZone:"Asia/Kolkata"})}
+async function api(url,options={}){const r=await fetch(url,{credentials:"same-origin",cache:"no-store",...options});const d=await r.json().catch(()=>({}));if(r.status===401){location.href="/admin.html";throw Error("Login session expired. Sign in again.")}if(!r.ok)throw Error(d.error||"Request failed ("+r.status+")");return d}
+function cell(tr,v){const td=document.createElement("td");td.textContent=v==null?"":String(v);tr.appendChild(td);return td}
+function btn(label,cls,fn){const b=document.createElement("button");b.textContent=label;b.className=cls||"";b.addEventListener("click",fn);return b}
+function activateTab(tab){document.querySelectorAll("nav [data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));["orders","products","customers","reports"].forEach(t=>$("tab-"+t).classList.toggle("hidden",t!==tab));$("detailPanel").classList.add("hidden")}
+document.querySelectorAll("nav [data-tab]").forEach(b=>b.addEventListener("click",()=>activateTab(b.dataset.tab)));
+async function loadProducts(){try{const d=await api("/api/products?admin=1");products=d.products||[];renderProducts();$("sProducts").textContent=products.length;$("sLow").textContent=products.filter(p=>Number(p.stock)<=5).length;renderStats();say("Products loaded.")}catch(e){say(e.message,true)}}
+function renderProducts(){const q=$("productSearch").value.toLowerCase();const body=$("productRows");body.replaceChildren();products.filter(p=>[p.name,p.sku,p.category].join(" ").toLowerCase().includes(q)).forEach(p=>{const tr=document.createElement("tr");cell(tr,p.id+" / "+(p.sku||"—"));cell(tr,p.name+(p.active?"":" (Hidden)"));cell(tr,money(p.price));const stock=cell(tr,p.stock);if(Number(p.stock)<=5)stock.className="low";cell(tr,p.category);const td=document.createElement("td");td.className="actions";td.append(btn("Edit","",()=>editProduct(p)));td.append(btn("Hide","danger",()=>hideProduct(p)));tr.append(td);body.append(tr)});if(!body.children.length){const tr=document.createElement("tr");const td=cell(tr,"No products found.");td.colSpan=6;body.append(tr)}}
+function editProduct(p){const f=$("productForm");for(const k of ["id","name","sku","price","stock","category","image_url","description"])f.elements[k].value=p[k]??"";f.elements.active.checked=Number(p.active)!==0;$("productEditorTitle").textContent="Edit Product #"+p.id;$("productEditor").classList.remove("hidden");$("productEditor").scrollIntoView({behavior:"smooth"})}
+function resetProduct(){const f=$("productForm");f.reset();f.elements.id.value="";f.elements.active.checked=true;$("productEditorTitle").textContent="Add Product";$("productEditor").classList.add("hidden")}
+async function hideProduct(p){if(!confirm("Hide '"+p.name+"' from the public store? Past orders remain."))return;try{await api("/api/products?id="+encodeURIComponent(p.id),{method:"DELETE"});say("Product hidden.");await loadProducts()}catch(e){say(e.message,true)}}
+$("productForm").addEventListener("submit",async e=>{e.preventDefault();const f=e.currentTarget,p=Object.fromEntries(new FormData(f).entries());p.id=p.id?Number(p.id):undefined;p.price=Number(p.price);p.stock=Number(p.stock);p.active=f.elements.active.checked?1:0;try{await api("/api/products",{method:p.id?"PUT":"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(p)});say(p.id?"Product updated.":"Product added.");resetProduct();await loadProducts()}catch(err){say(err.message,true)}});
+async function loadOrders(){try{const d=await api("/api/orders");orders=d.orders||[];renderOrders();renderCustomers();renderStats();renderReport();say("Orders loaded ("+orders.length+").")}catch(e){say(e.message,true)}}
+function filteredOrders(){const q=$("orderSearch").value.toLowerCase(),s=$("orderStatusFilter").value,p=$("paymentFilter").value;return orders.filter(o=>(!q||[o.order_number,o.customer_name,o.mobile].join(" ").toLowerCase().includes(q))&&(!s||o.order_status===s)&&(!p||o.payment_status===p))}
+function renderOrders(){const body=$("orderRows");body.replaceChildren();filteredOrders().forEach(o=>{const tr=document.createElement("tr");const d=cell(tr,o.order_number+"\\n"+safeDate(o.created_at));d.style.whiteSpace="pre-line";cell(tr,o.customer_name+"\\n"+o.mobile).style.whiteSpace="pre-line";cell(tr,[o.address,o.city,o.state,o.pincode].filter(Boolean).join(", "));cell(tr,money(o.total_amount));cell(tr,(o.payment_method||"")+" / "+(o.payment_status||""));const st=cell(tr,o.order_status||"");const select=document.createElement("select");["New","Processing","Shipped","Delivered","Cancelled","Returned","Pending Payment"].forEach(v=>{const op=document.createElement("option");op.value=v;op.textContent=v;select.append(op)});select.value=o.order_status||"New";st.append(document.createElement("br"),select);const td=document.createElement("td");td.className="actions";td.append(btn("View","light",()=>showOrder(o)));td.append(btn("Save Status","",()=>updateStatus(o,select.value)));tr.append(td);body.append(tr)});if(!body.children.length){const tr=document.createElement("tr"),td=cell(tr,"No matching orders.");td.colSpan=7;body.append(tr)}}
+async function updateStatus(o,status){if(status===o.order_status){say("No status change.");return}if(!confirm("Order "+o.order_number+" ka status '"+status+"' karna hai?"))return;try{await api("/api/orders",{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:o.id,order_status:status})});say("Order status updated.");await loadOrders()}catch(e){say(e.message,true)}}
+function showOrder(o){activeOrder=o;$("detailPanel").classList.remove("hidden");const box=$("orderDetail");box.replaceChildren();const info=document.createElement("div");info.className="detailgrid";const values=[["Order",o.order_number],["Customer",o.customer_name],["Mobile",o.mobile],["Address",[o.address,o.city,o.state,o.pincode].filter(Boolean).join(", ")],["Total",money(o.total_amount)],["Payment",(o.payment_method||"")+" / "+(o.payment_status||"")],["Razorpay Order ID",o.razorpay_order_id||"—"],["Razorpay Payment ID",o.razorpay_payment_id||"—"],["Order Status",o.order_status],["Created",safeDate(o.created_at)]];values.forEach(([k,v])=>{const p=document.createElement("p");const b=document.createElement("b");b.textContent=k+": ";p.append(b,document.createTextNode(v||"—"));info.append(p)});box.append(info);const h=document.createElement("h3");h.textContent="Items";box.append(h);const table=document.createElement("table"),head=document.createElement("tr");["Product","Quantity","Unit Price","Line Total"].forEach(x=>{const th=document.createElement("th");th.textContent=x;head.append(th)});table.append(head);(o.items||[]).forEach(i=>{const tr=document.createElement("tr");[i.product_name,i.quantity,money(i.unit_price),money(Number(i.quantity)*Number(i.unit_price))].forEach(v=>cell(tr,v));table.append(tr)});box.append(table);$("detailPanel").scrollIntoView({behavior:"smooth"})}
+function renderCustomers(){const map=new Map();orders.forEach(o=>{const k=o.mobile||o.customer_name;const x=map.get(k)||{name:o.customer_name,mobile:o.mobile,count:0,total:0,last:o.created_at};x.count++;x.total+=Number(o.total_amount||0);if(String(o.created_at)>String(x.last))x.last=o.created_at;map.set(k,x)});const q=$("customerSearch").value.toLowerCase(),body=$("customerRows");body.replaceChildren();[...map.values()].filter(x=>(x.name+" "+x.mobile).toLowerCase().includes(q)).sort((a,b)=>b.count-a.count).forEach(x=>{const tr=document.createElement("tr");[x.name,x.mobile,x.count,money(x.total),safeDate(x.last)].forEach(v=>cell(tr,v));body.append(tr)});if(!body.children.length){const tr=document.createElement("tr"),td=cell(tr,"No customer records.");td.colSpan=5;body.append(tr)}}
+function renderStats(){const paid=orders.filter(o=>o.payment_status==="Paid"),cod=orders.filter(o=>o.payment_method==="COD"&&o.payment_status!=="Paid");$("sOrders").textContent=orders.length;$("sSales").textContent=money(orders.filter(o=>o.payment_status==="Paid"||o.payment_method==="COD").reduce((a,o)=>a+Number(o.total_amount||0),0));$("sPaid").textContent=money(paid.reduce((a,o)=>a+Number(o.total_amount||0),0));$("sCod").textContent=money(cod.reduce((a,o)=>a+Number(o.total_amount||0),0))}
+function reportOrders(){const from=$("reportFrom").value,to=$("reportTo").value;return orders.filter(o=>{const day=String(o.created_at||"").slice(0,10);return(!from||day>=from)&&(!to||day<=to)})}
+function renderReport(){const list=reportOrders(),body=$("reportRows"),groups=new Map();list.forEach(o=>{const k=(o.payment_method||"Unknown")+"|"+(o.payment_status||"Unknown"),v=groups.get(k)||{count:0,total:0};v.count++;v.total+=Number(o.total_amount||0);groups.set(k,v)});body.replaceChildren();groups.forEach((v,k)=>{const tr=document.createElement("tr");[...k.split("|"),v.count,money(v.total)].forEach(x=>cell(tr,x));body.append(tr)});$("rOrders").textContent=list.length;$("rOnline").textContent=money(list.filter(o=>o.payment_method==="Razorpay"&&o.payment_status==="Paid").reduce((a,o)=>a+Number(o.total_amount||0),0));$("rCod").textContent=money(list.filter(o=>o.payment_method==="COD").reduce((a,o)=>a+Number(o.total_amount||0),0));$("rDelivered").textContent=list.filter(o=>o.order_status==="Delivered").length}
+function csvDownload(filename,rows){const csv=rows.map(row=>row.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\\r\\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\\ufeff"+csv],{type:"text/csv;charset=utf-8"}));a.download=filename;a.click();URL.revokeObjectURL(a.href)}
+$("exportOrders").addEventListener("click",()=>csvDownload("ashhaz-orders.csv",[["Order No","Customer","Mobile","Address","Total","Payment Method","Payment Status","Order Status","Date"],...filteredOrders().map(o=>[o.order_number,o.customer_name,o.mobile,[o.address,o.city,o.state,o.pincode].filter(Boolean).join(", "),o.total_amount,o.payment_method,o.payment_status,o.order_status,o.created_at])]));$("exportReport").addEventListener("click",()=>csvDownload("ashhaz-sales-report.csv",[["Order No","Customer","Total","Payment","Payment Status","Order Status","Date"],...reportOrders().map(o=>[o.order_number,o.customer_name,o.total_amount,o.payment_method,o.payment_status,o.order_status,o.created_at])]));
+["orderSearch","orderStatusFilter","paymentFilter"].forEach(id=>$(id).addEventListener("input",renderOrders));$("productSearch").addEventListener("input",renderProducts);$("customerSearch").addEventListener("input",renderCustomers);$("applyReport").addEventListener("click",renderReport);$("reloadOrders").addEventListener("click",loadOrders);$("reloadProducts").addEventListener("click",loadProducts);$("addProductBtn").addEventListener("click",()=>{resetProduct();$("productEditor").classList.remove("hidden");$("productEditor").scrollIntoView({behavior:"smooth"})});$("cancelProduct").addEventListener("click",resetProduct);$("closeDetail").addEventListener("click",()=>$("detailPanel").classList.add("hidden"));$("refreshAll").addEventListener("click",()=>Promise.all([loadProducts(),loadOrders()]));$("logoutBtn").addEventListener("click",async()=>{try{await fetch("/api/logout",{method:"POST",credentials:"same-origin"})}finally{location.href="/admin.html"}});
+Promise.all([loadProducts(),loadOrders()]);
 </script>
-</body>
-</html>
+</body></html>

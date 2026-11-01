@@ -593,7 +593,7 @@ document.getElementById("checkout-form").addEventListener("submit", async functi
 
           showOrderSuccess(
             paymentOrder.order_number,
-            paymentOrder.total_amount,
+            paymentOrder.amount / 100,
             "Online Payment Successful"
           );
         } catch (error) {
