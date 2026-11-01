@@ -1,11 +1,50 @@
 import { isAdmin, json, readJson } from "../_lib/auth.js";
 
+const ORDER_STATUSES = new Set([
+  "New", "Processing", "Shipped", "Delivered", "Cancelled", "Returned", "Pending Payment"
+]);
+
 export async function onRequestGet({ request, env }) {
   if (!(await isAdmin(request, env))) return json({ error: "Admin login required." }, 401);
-  const { results = [] } = await env.DB.prepare(
-    "SELECT id, order_number, customer_name, mobile, address, city, state, pincode, total_amount, payment_method, payment_status, order_status, created_at FROM orders ORDER BY id DESC LIMIT 500"
+  const { results: rows = [] } = await env.DB.prepare(
+    `SELECT id, order_number, customer_name, mobile, address, city, state, pincode,
+            total_amount, payment_method, payment_status, order_status,
+            razorpay_order_id, razorpay_payment_id, created_at
+     FROM orders ORDER BY id DESC LIMIT 500`
   ).all();
-  return json({ orders: results });
+
+  if (!rows.length) return json({ orders: [] });
+
+  const ids = rows.map(o => o.id);
+  const placeholders = ids.map(() => "?").join(",");
+  const { results: items = [] } = await env.DB.prepare(
+    `SELECT order_id, product_id, product_name, quantity, unit_price
+     FROM order_items WHERE order_id IN (${placeholders}) ORDER BY order_id DESC`
+  ).bind(...ids).all();
+
+  const byOrder = new Map();
+  for (const item of items) {
+    if (!byOrder.has(item.order_id)) byOrder.set(item.order_id, []);
+    byOrder.get(item.order_id).push(item);
+  }
+  return json({ orders: rows.map(o => ({ ...o, items: byOrder.get(o.id) || [] })) });
+}
+
+export async function onRequestPatch({ request, env }) {
+  if (!(await isAdmin(request, env))) return json({ error: "Admin login required." }, 401);
+  const data = await readJson(request);
+  const id = Number(data?.id);
+  const status = String(data?.order_status || "");
+  if (!Number.isInteger(id) || id < 1 || !ORDER_STATUSES.has(status)) {
+    return json({ error: "Valid order ID and order status are required." }, 400);
+  }
+
+  const result = await env.DB.prepare(
+    "UPDATE orders SET order_status = ? WHERE id = ?"
+  ).bind(status, id).run();
+
+  if (!result.meta?.changes) return json({ error: "Order not found or status unchanged." }, 404);
+  return json({ ok: true, message: "Order status updated." });
 }
 
 export async function onRequestPost({ request, env }) {

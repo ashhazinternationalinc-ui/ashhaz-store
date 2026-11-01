@@ -1,9 +1,12 @@
 import { isAdmin, json, readJson } from "../_lib/auth.js";
 
-export async function onRequestGet({ env }) {
-  const { results = [] } = await env.DB.prepare(
-    "SELECT id, sku, name, description, price, stock, image_url, category, active, created_at FROM products WHERE active = 1 ORDER BY id DESC"
-  ).all();
+export async function onRequestGet({ request, env }) {
+  const adminView = new URL(request.url).searchParams.get("admin") === "1";
+  if (adminView && !(await isAdmin(request, env))) return json({ error: "Admin login required." }, 401);
+  const sql = adminView
+    ? "SELECT id, sku, name, description, price, stock, image_url, category, active, created_at FROM products ORDER BY id DESC"
+    : "SELECT id, sku, name, description, price, stock, image_url, category, active, created_at FROM products WHERE active = 1 ORDER BY id DESC";
+  const { results = [] } = await env.DB.prepare(sql).all();
   return json({ products: results });
 }
 
@@ -14,8 +17,8 @@ export async function onRequestPost({ request, env }) {
   if (error) return json({ error }, 400);
   try {
     const result = await env.DB.prepare(
-      "INSERT INTO products (sku, name, description, price, stock, image_url, category, active) VALUES (?, ?, ?, ?, ?, ?, ?, 1)"
-    ).bind(clean(p.sku) || null, clean(p.name), clean(p.description), Number(p.price), Number(p.stock), clean(p.image_url), clean(p.category)).run();
+      "INSERT INTO products (sku, name, description, price, stock, image_url, category, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+    ).bind(clean(p.sku) || null, clean(p.name), clean(p.description), Number(p.price), Number(p.stock), clean(p.image_url), clean(p.category), p.active === 0 ? 0 : 1).run();
     return json({ ok: true, id: result.meta?.last_row_id }, 201);
   } catch (e) {
     return json({ error: "Product could not be saved. Check whether SKU is unique." }, 400);
