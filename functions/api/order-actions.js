@@ -34,28 +34,69 @@ export async function onRequestPost({ request, env }) {
 
   if (action === "refund") {
     const amount = Number(data.amount);
-    if (!Number.isFinite(amount) || amount <= 0 || amount > Number(order.total_amount)) return json({ error: "Refund amount must be greater than zero and not exceed the order total." }, 400);
-    if (order.payment_method === "Razorpay" && order.payment_status === "Paid") {
-      if (!order.razorpay_payment_id || !env.RAZORPAY_KEY_ID || !env.RAZORPAY_KEY_SECRET) return json({ error: "Razorpay payment ID or Cloudflare Razorpay secrets are missing. No refund was sent." }, 400);
+    if (!Number.isFinite(amount) || amount <= 0 || amount > Number(order.total_amount)) {
+      return json({ error: "Refund amount must be greater than zero and not exceed the order total." }, 400);
+    }
+
+    if (order.payment_method === "Razorpay" &&
+        ["Paid", "Partially Refunded"].includes(order.payment_status)) {
+      if (!order.razorpay_payment_id || !env.RAZORPAY_KEY_ID || !env.RAZORPAY_KEY_SECRET) {
+        return json({ error: "Razorpay payment ID or Cloudflare Razorpay secrets are missing. No refund was sent." }, 400);
+      }
+
+      // Check previously submitted successful/pending refunds before calling Razorpay.
+      const prior = await env.DB.prepare(
+        "SELECT COALESCE(SUM(amount),0) AS total FROM order_actions WHERE order_id = ? AND action_type = 'refund' AND status IN ('processed','pending','Manual Refund Required')"
+      ).bind(orderId).first();
+      const alreadyRefunded = Number(prior?.total || 0);
+      const remaining = Number(order.total_amount) - alreadyRefunded;
+      if (amount > remaining + 0.0001) {
+        return json({ error: `Only ₹${Math.max(0, remaining).toFixed(2)} remains refundable on this order.` }, 400);
+      }
+
       const auth = btoa(`${env.RAZORPAY_KEY_ID}:${env.RAZORPAY_KEY_SECRET}`);
       const response = await fetch(`https://api.razorpay.com/v1/payments/${encodeURIComponent(order.razorpay_payment_id)}/refund`, {
-        method: "POST", headers: { Authorization: `Basic ${auth}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: Math.round(amount * 100), notes: { order_number: order.order_number, reason: reason || "Customer refund" } })
+        method: "POST",
+        headers: { Authorization: `Basic ${auth}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: Math.round(amount * 100),
+          notes: { order_number: order.order_number, reason: reason || "Customer refund" }
+        })
       });
       const result = await response.json().catch(() => ({}));
       if (!response.ok) {
         await logAction(env, { orderId, action, status: "Failed", amount, reason, requestKey, details: result.error?.description || "Razorpay refund request failed" });
         return json({ error: result.error?.description || "Razorpay refund failed. Check Razorpay Dashboard." }, 400);
       }
-      await logAction(env, { orderId, action, status: result.status || "processed", amount, reason, requestKey, externalId: result.id || "", details: JSON.stringify(result) });
-      const prior = await env.DB.prepare("SELECT COALESCE(SUM(amount),0) AS total FROM order_actions WHERE order_id = ? AND action_type = 'refund' AND status IN ('processed','pending','Manual Refund Required') AND request_key != ?").bind(orderId, requestKey).first();
-      const refunded = Number(prior?.total || 0) + amount;
-      await env.DB.prepare("UPDATE orders SET payment_status = ? WHERE id = ?").bind(refunded >= Number(order.total_amount) ? "Refunded" : "Partially Refunded", orderId).run();
-      return json({ ok: true, message: `Razorpay refund submitted. Refund ID: ${result.id || "created"}`, refund_id: result.id || "" });
+
+      const refundStatus = String(result.status || "pending").toLowerCase();
+      await logAction(env, { orderId, action, status: refundStatus, amount, reason, requestKey, externalId: result.id || "", details: JSON.stringify(result) });
+      // Do not tell the admin/customer that money has been returned until Razorpay confirms processing.
+      // Pending refunds reserve the amount against another request, but are not marked as completed.
+      const confirmed = await env.DB.prepare(
+        "SELECT COALESCE(SUM(amount),0) AS total FROM order_actions WHERE order_id = ? AND action_type = 'refund' AND status = 'processed'"
+      ).bind(orderId).first();
+      const confirmedAmount = Number(confirmed?.total || 0);
+      const nextPaymentStatus = refundStatus === "processed"
+        ? (confirmedAmount >= Number(order.total_amount) - 0.0001 ? "Refunded" : "Partially Refunded")
+        : (refundStatus === "pending" ? "Refund Pending" : order.payment_status);
+      await env.DB.prepare("UPDATE orders SET payment_status = ? WHERE id = ?")
+        .bind(nextPaymentStatus, orderId).run();
+
+      return json({
+        ok: true,
+        message: `Razorpay refund request submitted (${refundStatus}). Refund ID: ${result.id || "created"}`,
+        refund_id: result.id || "",
+        refund_status: refundStatus
+      });
     }
-    // COD refunds are tracked but never represented as paid back automatically.
-    await logAction(env, { orderId, action, status: "Manual Refund Required", amount, reason, requestKey, details: "Transfer refund to customer UPI/bank manually, then record completion in business records." });
-    return json({ ok: true, manual: true, message: "COD/manual refund recorded as Manual Refund Required. Transfer money separately; this system has not sent money." });
+
+    // COD/manual refunds are recorded only; no money is transferred by this endpoint.
+    await logAction(env, {
+      orderId, action, status: "Manual Refund Required", amount, reason, requestKey,
+      details: "Manual transfer to customer UPI/bank is required. This system has not sent money."
+    });
+    return json({ ok: true, manual: true, message: "Manual refund recorded. Transfer money separately; no payment was sent automatically." });
   }
 
   if (action === "restock" || action === "exchange") {

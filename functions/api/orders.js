@@ -9,7 +9,8 @@ export async function onRequestGet({ request, env }) {
   const { results: rows = [] } = await env.DB.prepare(
     `SELECT id, order_number, customer_name, mobile, address, city, state, pincode,
             total_amount, payment_method, payment_status, order_status,
-            razorpay_order_id, razorpay_payment_id, created_at, archived_at
+            razorpay_order_id, razorpay_payment_id, created_at, archived_at,
+            shipkia_order_id, shipkia_awb, courier_partner, courier_status
      FROM orders ORDER BY id DESC LIMIT 500`
   ).all();
 
