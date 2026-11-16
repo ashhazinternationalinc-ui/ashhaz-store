@@ -160,6 +160,14 @@ footer{background:linear-gradient(120deg,#1c2024,#30353b);color:#f4f0e9;border-t
 .cart-empty{padding:25px 5px;text-align:center;color:var(--muted)}
 @media(max-width:560px){.cart-toggle{font-size:12px;padding:8px 10px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
+
+/* Page-specific background theme */
+body[data-category-page] { background:#f2e9dc !important; }
+body[data-category-page] main { background:linear-gradient(180deg,#eee3d2 0%,#f2e9dc 100%) !important; }
+body[data-category-page] .section { background:transparent; }
+body[data-category-page] .product-card,
+body[data-category-page] .category-card { background:#d9c4a4; }
+
 </style>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 /* ASHHAZ category page background refinement */
