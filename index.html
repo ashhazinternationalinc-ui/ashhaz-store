@@ -23,29 +23,29 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}
 body{margin:0;background:var(--cream);color:var(--text);font-family:Arial,Helvetica,sans-serif;line-height:1.6}
 a{color:inherit}
 img{max-width:100%}
-.topbar{background:#171b20;color:#e8d7b6;text-align:center;padding:7px 12px;font-size:11px;letter-spacing:2px}
-header{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:13px 5%;background:linear-gradient(120deg,var(--dark),var(--dark2));border-bottom:3px solid var(--gold)}
-.brand-logo img{display:block;width:auto;height:68px;max-width:190px;object-fit:contain}
-.header-right{display:flex;align-items:center;justify-content:flex-end;gap:20px;flex-wrap:wrap}
-nav{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
-nav a{color:#fff;text-decoration:none;font-size:14px;font-weight:600}
+.topbar{display:none}
+header{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:nowrap;padding:12px 5%;background:#202326;border-bottom:1px solid #a77b2d;min-height:100px}
+.brand-logo{display:block;flex:0 0 285px}.brand-logo img{display:block;width:100%;height:76px;max-width:285px;object-fit:contain;object-position:left center}
+.header-right{display:flex;align-items:center;justify-content:flex-end;gap:18px;flex:1;min-width:0;flex-wrap:nowrap}
+nav{display:flex;gap:0;align-items:center;justify-content:center;flex:1;flex-wrap:nowrap}
+nav a{color:#f7f1e7;text-decoration:none;font-size:14px;font-weight:500;white-space:nowrap;padding:0 15px;border-right:1px solid #8c754f}nav a:last-child{border-right:0}
 nav a:hover{color:var(--gold-light)}
-.search{display:flex;overflow:hidden;border:1px solid #82714f;border-radius:5px}
-.search input{width:160px;min-width:0;padding:9px 10px;background:transparent;color:#fff;border:0;outline:none}
+.search{display:flex;overflow:hidden;border:1px solid #82714f;border-radius:24px;flex:0 0 auto}
+.search input{width:140px;min-width:0;padding:9px 12px;background:transparent;color:#fff;border:0;outline:none}
 .search input::placeholder{color:#ddd2bd}
-.search button{padding:8px 12px;border:0;background:var(--gold);cursor:pointer;font-weight:bold}
-.hero{min-height:420px;display:flex;align-items:center;padding:65px 8%;color:#fff;background:linear-gradient(90deg,rgba(25,28,31,.95),rgba(25,28,31,.77) 48%,rgba(25,28,31,.12)),url("https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1800&q=85") center/cover no-repeat}
+.search button{padding:8px 12px;border:0;background:transparent;color:#f5d78e;cursor:pointer;font-weight:bold;font-size:19px}
+.hero{position:relative;width:100%;padding:0;display:block;overflow:hidden;background:#ead8bd;color:#201d19}.hero-image{display:block;width:100%;height:auto;max-width:none;object-fit:contain}.hero-content{position:absolute;left:14.5%;top:12%;width:min(48%,680px);max-width:680px;color:#1e1b17}.hero .eyebrow{color:#25221e;font-size:clamp(10px,1.1vw,15px);letter-spacing:3px}.hero h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(30px,4.2vw,64px);font-weight:500;line-height:1.06;margin:16px 0 14px;color:#171512}.hero p{max-width:520px;color:#342c22;font-size:clamp(12px,1.35vw,18px);line-height:1.6}.hero .button{margin-top:18px;padding:13px 28px;background:#b17b18;color:#fff;border:1px solid #e5c16c;border-radius:22px;font-size:clamp(12px,1.2vw,17px)}
 .hero-content{max-width:600px}
 .eyebrow{color:var(--gold-light);font-size:11px;font-weight:bold;letter-spacing:3px;text-transform:uppercase}
 .hero h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(38px,5vw,62px);font-weight:500;line-height:1.1;margin:12px 0 18px}
 .hero p{max-width:480px;color:#eeeae3;font-size:16px;line-height:1.8}
 .button{display:inline-block;margin-top:18px;padding:13px 23px;background:linear-gradient(135deg,#e0c17f,#bd934b);color:#20252b;border:1px solid #e7cc90;border-radius:4px;text-decoration:none;font-size:13px;font-weight:bold}
 .button:hover{filter:brightness(1.06);transform:translateY(-1px)}
-.benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding:22px 5%;background:#292e33;color:white;border-bottom:1px solid #4a4336}
-.benefit{display:flex;align-items:center;justify-content:center;gap:10px}
-.benefit-icon{font-size:25px;color:var(--gold-light)}
-.benefit strong{display:block;font-size:13px}
-.benefit small{display:block;color:#d0cfcb;font-size:11px}
+.benefits{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;padding:20px 4%;background:#f7eddd;color:#24211c;border-bottom:1px solid #e6d3b5}
+.benefit{display:flex;align-items:center;justify-content:center;gap:10px;padding:4px 12px;border-right:1px solid #d5b77d}.benefit:last-child{border-right:0}
+.benefit-icon{font-size:29px;color:#9b690e}
+.benefit strong{display:block;font-size:13px;color:#28231d}
+.benefit small{display:block;color:#71614a;font-size:11px}
 main{max-width:1320px;margin:auto;padding:40px 5%}
 .section{margin-bottom:43px;scroll-margin-top:20px}
 .section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:21px}
@@ -85,27 +85,38 @@ footer{background:linear-gradient(120deg,#1c2024,#30353b);color:#f4f0e9;border-t
 .footer-column a{display:block;width:fit-content;margin:7px 0;color:#e7e3dc;font-size:13px;text-decoration:none}
 .footer-column a:hover{color:var(--gold-light)}
 .footer-bottom{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:15px 5%;border-top:1px solid #45484a;color:#c9c8c4;font-size:12px}
-@media(max-width:900px){
-  header{justify-content:center}
-  .header-right{justify-content:center}
+@media(max-width:1100px){
+  header{justify-content:center;gap:10px;padding:12px 3%;flex-wrap:wrap}
+  .brand-logo{flex-basis:210px}
+  .brand-logo img{height:64px}
+  .header-right{width:100%;justify-content:center;gap:8px;flex-wrap:wrap}
+  nav{flex:1 1 100%;justify-content:center;flex-wrap:wrap}
+  nav a{font-size:12px;padding:5px 8px}
   .category-grid,.product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .benefits{grid-template-columns:repeat(2,1fr)}
   .footer-main{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(max-width:560px){
-  .topbar{font-size:9px;letter-spacing:1px}
-  header{padding:14px;gap:13px}
-  .brand-logo img{height:55px;max-width:155px}
-  .header-right{width:100%;gap:13px}
-  nav{justify-content:center;gap:12px 17px}
-  nav a{font-size:13px}
-  .search{width:100%;max-width:340px}
+  .topbar{display:none}
+  header{padding:10px 12px;gap:8px;flex-wrap:wrap;min-height:0}
+  .brand-logo{flex:0 0 150px}
+  .brand-logo img{height:48px;max-width:150px}
+  .header-right{width:100%;gap:8px;flex-wrap:wrap;justify-content:center}
+  nav{order:1;width:100%;flex:1 0 100%;flex-wrap:wrap;gap:0}
+  nav a{font-size:11px;padding:5px 8px}
+  .search{order:2;flex:1 1 180px;max-width:260px}
   .search input{flex:1;width:auto}
-  .hero{min-height:390px;padding:48px 22px;background-position:60% center}
-  .hero h1{font-size:39px}
-  .hero p{font-size:14px}
-  .benefits{padding:18px 12px;gap:18px 8px}
-  .benefit{justify-content:flex-start;gap:7px}
+  .cart-toggle{order:3}
+  .hero{min-height:0;padding:0;overflow:visible}
+  .hero-image{width:100%;height:auto;object-fit:contain}
+  .hero-content{position:static;width:auto;max-width:none;padding:22px 20px 26px;background:#f6ead7;text-align:center}
+  .hero h1{font-size:32px;margin:9px 0}
+  .hero p{font-size:14px;margin:0 auto}
+  .hero .eyebrow{font-size:10px}
+  .hero .button{margin-top:12px}
+  .benefits{grid-template-columns:repeat(2,minmax(0,1fr));padding:14px 8px;gap:8px 0}
+  .benefit{justify-content:flex-start;gap:7px;padding:7px 9px;border-right:0}
+  .benefit:last-child{grid-column:1/-1;justify-content:center}
   .benefit-icon{font-size:21px}
   .benefit strong{font-size:11px}
   .benefit small{font-size:10px}
@@ -153,19 +164,18 @@ footer{background:linear-gradient(120deg,#1c2024,#30353b);color:#f4f0e9;border-t
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script></head>
 
 <body>
-<div class="topbar">PREMIUM HOME DECOR · GARDENING · HANDCRAFTED DESIGNS</div>
-
 <header>
   <a class="brand-logo" href="/#home" aria-label="Ashhaz home">
     <img src="/logo.png" alt="Ashhaz International Inc Logo">
   </a>
   <div class="header-right">
     <nav aria-label="Main navigation">
-      <a href="#home">Home</a>
-      <a href="#products">Products</a>
-      <a href="#contact">Contact</a>
-      <a href="#about">About</a>
-      <a href="/admin">Admin</a>
+      <a href="#categories">Home Decor</a>
+      <a href="#categories">Gardening</a>
+      <a href="#categories">Furniture</a>
+      <a href="#categories">Lighting</a>
+      <a href="#categories">Festive &amp; Diwali</a>
+      <a href="#products">New Arrivals</a>
     </nav>
     <button class="cart-toggle" id="cart-toggle" type="button" aria-label="Open shopping cart">
       🛒 Cart (<span id="cart-count">0</span>)
@@ -178,19 +188,21 @@ footer{background:linear-gradient(120deg,#1c2024,#30353b);color:#f4f0e9;border-t
 </header>
 
 <section class="hero" id="home">
+  <img class="hero-image" src="/ashhaz-home-hero.png" alt="Elegant Ashhaz home decor living room with planters, golden lanterns and furniture">
   <div class="hero-content">
-    <div class="eyebrow">Premium Home Decor &amp; Gardening</div>
-    <h1>Beautiful Products for Your Home &amp; Garden</h1>
-    <p>Discover elegant home decor, jute planters, iron baskets and handcrafted designs made to bring warmth to your space.</p>
-    <a class="button" href="#products">Explore Products &nbsp; →</a>
+    <div class="eyebrow">ASHHAZ INTERNATIONAL INC</div>
+    <h1>Premium Home Decor,<br>Gardening &amp; Furniture</h1>
+    <p><em>Handcrafted · Sustainable · Contemporary</em></p>
+    <a class="button" href="#products">Shop Collection &nbsp; →</a>
   </div>
 </section>
 
-<section class="benefits" aria-label="Our highlights">
-  <div class="benefit"><span class="benefit-icon">✧</span><div><strong>Quality Designs</strong><small>Carefully selected products</small></div></div>
-  <div class="benefit"><span class="benefit-icon">♧</span><div><strong>Home &amp; Garden</strong><small>Made for your spaces</small></div></div>
-  <div class="benefit"><span class="benefit-icon">◇</span><div><strong>Elegant Style</strong><small>Timeless decorative pieces</small></div></div>
-  <div class="benefit"><span class="benefit-icon">✉</span><div><strong>Contact Our Team</strong><small>We are here to help</small></div></div>
+<section class="benefits" aria-label="Ashhaz service highlights">
+  <div class="benefit"><span class="benefit-icon">♧</span><div><strong>Handcrafted Products</strong></div></div>
+  <div class="benefit"><span class="benefit-icon">♢</span><div><strong>Quality Assured</strong></div></div>
+  <div class="benefit"><span class="benefit-icon">🚚</span><div><strong>Pan India Delivery</strong></div></div>
+  <div class="benefit"><span class="benefit-icon">◎</span><div><strong>Export Worldwide</strong></div></div>
+  <div class="benefit"><span class="benefit-icon">GST</span><div><strong>GST Registered</strong></div></div>
 </section>
 
 <main>
