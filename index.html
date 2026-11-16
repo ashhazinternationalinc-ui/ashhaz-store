@@ -53,6 +53,12 @@ main{max-width:1320px;margin:auto;padding:40px 5%}
 .gold-line{width:42px;height:2px;background:var(--gold)}
 .heading-left{display:flex;align-items:center;gap:13px}
 .text-link{font-size:12px;font-weight:bold;color:#80551d;text-decoration:none;white-space:nowrap}
+.product-heading-actions{display:flex;align-items:center;justify-content:flex-end;gap:14px;flex-wrap:wrap}
+.filter-label{font-size:12px;color:var(--muted)}
+.clear-filter{border:1px solid var(--gold);background:#fffaf1;color:#80551d;border-radius:20px;padding:7px 12px;font-size:12px;font-weight:bold;cursor:pointer}
+.clear-filter[hidden]{display:none}
+.category-card:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+
 .category-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
 .category-card{overflow:hidden;background:#fff;border:1px solid var(--border);border-radius:5px;text-decoration:none;transition:transform .2s,box-shadow .2s}
 .category-card:hover{transform:translateY(-4px);box-shadow:0 10px 25px #00000012}
@@ -170,11 +176,11 @@ footer{background:linear-gradient(120deg,#1c2024,#30353b);color:#f4f0e9;border-t
   </a>
   <div class="header-right">
     <nav aria-label="Main navigation">
-      <a href="#categories">Home Decor</a>
-      <a href="#categories">Gardening</a>
-      <a href="#categories">Furniture</a>
-      <a href="#categories">Lighting</a>
-      <a href="#categories">Festive &amp; Diwali</a>
+      <a href="#products" data-nav-category="decor">Home Decor</a>
+      <a href="#products" data-nav-category="jute">Gardening</a>
+      <a href="#products" data-nav-category="furniture">Furniture</a>
+      <a href="#products" data-nav-category="lighting">Lighting</a>
+      <a href="#products" data-nav-category="diya">Festive &amp; Diwali</a>
       <a href="#products">New Arrivals</a>
     </nav>
     <button class="cart-toggle" id="cart-toggle" type="button" aria-label="Open shopping cart">
@@ -235,7 +241,11 @@ footer{background:linear-gradient(120deg,#1c2024,#30353b);color:#f4f0e9;border-t
   <section class="section" id="products">
     <div class="section-heading">
       <div class="heading-left"><h2>Our Products</h2><span class="gold-line"></span></div>
-      <a class="text-link" href="#products" id="view-all">VIEW ALL →</a>
+      <div class="product-heading-actions">
+        <span id="product-filter-label" class="filter-label" aria-live="polite">All products</span>
+        <button class="clear-filter" id="clear-product-filter" type="button" hidden>Show all products</button>
+        <a class="text-link" href="#products" id="view-all">VIEW ALL →</a>
+      </div>
     </div>
     <div class="product-grid" id="live-product-list" aria-live="polite">
       <p class="message">Loading products...</p>
@@ -724,12 +734,70 @@ function renderProducts(products) {
   });
 }
 
+let activeCategory = "";
+
+const categoryConfig = {
+  jute: {
+    label: "Jute Planters",
+    terms: ["jute", "planter", "plant pot", "plant container", "garden planter"]
+  },
+  fruit: {
+    label: "Fruit Baskets",
+    terms: ["fruit basket", "fruit", "fruitbowl", "fruit bowl"]
+  },
+  diya: {
+    label: "Candle Holders & Diyas",
+    terms: ["diya", "candle", "tea light", "tealight", "lantern", "festive", "lighting"]
+  },
+  decor: {
+    label: "Home Decor",
+    terms: ["home decor", "decor", "showpiece", "wall art", "vase", "mirror", "clock", "sculpture", "centerpiece"]
+  },
+  furniture: {
+    label: "Furniture",
+    terms: ["furniture", "chair", "table", "stool", "shelf", "stand", "rack"]
+  },
+  lighting: {
+    label: "Lighting",
+    terms: ["lighting", "lamp", "light", "candle", "lantern", "diya"]
+  }
+};
+
+function productSearchText(product) {
+  return [
+    product.name, product.description, product.category,
+    product.subcategory, product.product_type, product.sku
+  ].filter(Boolean).join(" ").toLowerCase();
+}
+
 function filterProducts() {
   const query = searchInput.value.trim().toLowerCase();
-  renderProducts(allProducts.filter(function(product) {
-    return String(product.name || "").toLowerCase().includes(query) ||
-      String(product.description || "").toLowerCase().includes(query);
-  }));
+  const config = categoryConfig[activeCategory];
+  const filtered = allProducts.filter(function(product) {
+    const text = productSearchText(product);
+    const matchesCategory = !config || config.terms.some(function(term) {
+      return text.includes(term);
+    });
+    const matchesSearch = !query || text.includes(query);
+    return matchesCategory && matchesSearch;
+  });
+
+  renderProducts(filtered);
+
+  const label = document.getElementById("product-filter-label");
+  const clearButton = document.getElementById("clear-product-filter");
+  if (label) {
+    const categoryLabel = config ? config.label : "All products";
+    label.textContent = categoryLabel + (query ? ' · Search: "' + query + '"' : "") +
+      " (" + filtered.length + ")";
+  }
+  if (clearButton) clearButton.hidden = !activeCategory && !query;
+}
+
+function selectProductCategory(category) {
+  activeCategory = categoryConfig[category] ? category : "";
+  filterProducts();
+  document.getElementById("products").scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 async function loadProducts() {
@@ -748,27 +816,34 @@ async function loadProducts() {
 document.getElementById("search-form").addEventListener("submit", function(event) {
   event.preventDefault();
   filterProducts();
-  document.getElementById("products").scrollIntoView({behavior:"smooth"});
+  document.getElementById("products").scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
 searchInput.addEventListener("input", filterProducts);
 
 document.getElementById("view-all").addEventListener("click", function() {
   searchInput.value = "";
+  activeCategory = "";
+  filterProducts();
+});
+
+document.getElementById("clear-product-filter").addEventListener("click", function() {
+  searchInput.value = "";
+  activeCategory = "";
   filterProducts();
 });
 
 document.querySelectorAll("[data-category]").forEach(function(category) {
-  category.addEventListener("click", function() {
-    const term = category.dataset.category;
-    const terms = {
-      jute: "jute",
-      fruit: "fruit",
-      diya: "diya",
-      decor: "decor"
-    };
-    searchInput.value = terms[term] || "";
-    filterProducts();
+  category.addEventListener("click", function(event) {
+    event.preventDefault();
+    selectProductCategory(category.dataset.category);
+  });
+});
+
+document.querySelectorAll("[data-nav-category]").forEach(function(link) {
+  link.addEventListener("click", function(event) {
+    event.preventDefault();
+    selectProductCategory(link.dataset.navCategory);
   });
 });
 
