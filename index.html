@@ -53,12 +53,6 @@ main{max-width:1320px;margin:auto;padding:40px 5%}
 .gold-line{width:42px;height:2px;background:var(--gold)}
 .heading-left{display:flex;align-items:center;gap:13px}
 .text-link{font-size:12px;font-weight:bold;color:#80551d;text-decoration:none;white-space:nowrap}
-.product-heading-actions{display:flex;align-items:center;justify-content:flex-end;gap:14px;flex-wrap:wrap}
-.filter-label{font-size:12px;color:var(--muted)}
-.clear-filter{border:1px solid var(--gold);background:#fffaf1;color:#80551d;border-radius:20px;padding:7px 12px;font-size:12px;font-weight:bold;cursor:pointer}
-.clear-filter[hidden]{display:none}
-.category-card:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
-
 .category-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
 .category-card{overflow:hidden;background:#fff;border:1px solid var(--border);border-radius:5px;text-decoration:none;transition:transform .2s,box-shadow .2s}
 .category-card:hover{transform:translateY(-4px);box-shadow:0 10px 25px #00000012}
@@ -176,12 +170,12 @@ footer{background:linear-gradient(120deg,#1c2024,#30353b);color:#f4f0e9;border-t
   </a>
   <div class="header-right">
     <nav aria-label="Main navigation">
-      <a href="#products" data-nav-category="decor">Home Decor</a>
-      <a href="#products" data-nav-category="jute">Gardening</a>
-      <a href="#products" data-nav-category="furniture">Furniture</a>
-      <a href="#products" data-nav-category="lighting">Lighting</a>
-      <a href="#products" data-nav-category="diya">Festive &amp; Diwali</a>
-      <a href="#products">New Arrivals</a>
+      <a href="home-decor.html">Home Decor</a>
+      <a href="gardening.html">Gardening</a>
+      <a href="furniture.html">Furniture</a>
+      <a href="lighting.html">Lighting</a>
+      <a href="festive-diwali.html">Festive &amp; Diwali</a>
+      <a href="new-arrivals.html">New Arrivals</a>
     </nav>
     <button class="cart-toggle" id="cart-toggle" type="button" aria-label="Open shopping cart">
       🛒 Cart (<span id="cart-count">0</span>)
@@ -219,19 +213,19 @@ footer{background:linear-gradient(120deg,#1c2024,#30353b);color:#f4f0e9;border-t
     </div>
 
     <div class="category-grid">
-      <a class="category-card" href="#products" data-category="jute">
+      <a class="category-card" href="gardening.html" data-category="jute">
         <img src="https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=700&q=80" alt="Plants and planters" loading="lazy">
         <div class="category-info"><h3>Jute Planters</h3><p>Decorative planters for home, balcony and garden.</p></div>
       </a>
-      <a class="category-card" href="#products" data-category="fruit">
+      <a class="category-card" href="home-decor.html" data-category="fruit">
         <img src="https://images.unsplash.com/photo-1543168256-418811576931?auto=format&fit=crop&w=700&q=80" alt="Fruit and home accessories" loading="lazy">
         <div class="category-info"><h3>Fruit Baskets</h3><p>Stylish baskets for everyday use and gifting.</p></div>
       </a>
-      <a class="category-card" href="#products" data-category="diya">
+      <a class="category-card" href="festive-diwali.html" data-category="diya">
         <img src="https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?auto=format&fit=crop&w=700&q=80" alt="Decorative candles" loading="lazy">
         <div class="category-info"><h3>Candle Holders &amp; Diyas</h3><p>Decorative lighting for festive occasions.</p></div>
       </a>
-      <a class="category-card" href="#products" data-category="decor">
+      <a class="category-card" href="home-decor.html" data-category="decor">
         <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=700&q=80" alt="Elegant home decor" loading="lazy">
         <div class="category-info"><h3>Home Decor &amp; Furniture</h3><p>Beautiful designs for your living space.</p></div>
       </a>
@@ -241,11 +235,7 @@ footer{background:linear-gradient(120deg,#1c2024,#30353b);color:#f4f0e9;border-t
   <section class="section" id="products">
     <div class="section-heading">
       <div class="heading-left"><h2>Our Products</h2><span class="gold-line"></span></div>
-      <div class="product-heading-actions">
-        <span id="product-filter-label" class="filter-label" aria-live="polite">All products</span>
-        <button class="clear-filter" id="clear-product-filter" type="button" hidden>Show all products</button>
-        <a class="text-link" href="#products" id="view-all">VIEW ALL →</a>
-      </div>
+      <a class="text-link" href="#products" id="view-all">VIEW ALL →</a>
     </div>
     <div class="product-grid" id="live-product-list" aria-live="polite">
       <p class="message">Loading products...</p>
@@ -734,70 +724,26 @@ function renderProducts(products) {
   });
 }
 
-let activeCategory = "";
-
-const categoryConfig = {
-  jute: {
-    label: "Jute Planters",
-    terms: ["jute", "planter", "plant pot", "plant container", "garden planter"]
-  },
-  fruit: {
-    label: "Fruit Baskets",
-    terms: ["fruit basket", "fruit", "fruitbowl", "fruit bowl"]
-  },
-  diya: {
-    label: "Candle Holders & Diyas",
-    terms: ["diya", "candle", "tea light", "tealight", "lantern", "festive", "lighting"]
-  },
-  decor: {
-    label: "Home Decor",
-    terms: ["home decor", "decor", "showpiece", "wall art", "vase", "mirror", "clock", "sculpture", "centerpiece"]
-  },
-  furniture: {
-    label: "Furniture",
-    terms: ["furniture", "chair", "table", "stool", "shelf", "stand", "rack"]
-  },
-  lighting: {
-    label: "Lighting",
-    terms: ["lighting", "lamp", "light", "candle", "lantern", "diya"]
-  }
-};
-
-function productSearchText(product) {
-  return [
-    product.name, product.description, product.category,
-    product.subcategory, product.product_type, product.sku
-  ].filter(Boolean).join(" ").toLowerCase();
-}
-
 function filterProducts() {
   const query = searchInput.value.trim().toLowerCase();
-  const config = categoryConfig[activeCategory];
-  const filtered = allProducts.filter(function(product) {
-    const text = productSearchText(product);
-    const matchesCategory = !config || config.terms.some(function(term) {
-      return text.includes(term);
-    });
-    const matchesSearch = !query || text.includes(query);
-    return matchesCategory && matchesSearch;
+  const pageKey = document.body.dataset.categoryPage || "";
+  const rules = {
+    "home-decor": ["decor", "basket", "fruit", "home", "jute", "planter"],
+    "gardening": ["garden", "planter", "jute", "plant"],
+    "furniture": ["furniture", "table", "chair", "stand", "shelf"],
+    "lighting": ["light", "lamp", "candle", "diya", "lantern"],
+    "festive-diwali": ["diya", "diwali", "festive", "candle", "lantern"],
+    "new-arrivals": []
+  };
+  const terms = rules[pageKey] || [];
+  let items = allProducts.filter(function(product) {
+    const haystack = [product.name, product.description, product.category, product.sku].join(" ").toLowerCase();
+    const matchesQuery = !query || haystack.includes(query);
+    const matchesCategory = !pageKey || pageKey === "new-arrivals" || terms.some(term => haystack.includes(term));
+    return matchesQuery && matchesCategory;
   });
-
-  renderProducts(filtered);
-
-  const label = document.getElementById("product-filter-label");
-  const clearButton = document.getElementById("clear-product-filter");
-  if (label) {
-    const categoryLabel = config ? config.label : "All products";
-    label.textContent = categoryLabel + (query ? ' · Search: "' + query + '"' : "") +
-      " (" + filtered.length + ")";
-  }
-  if (clearButton) clearButton.hidden = !activeCategory && !query;
-}
-
-function selectProductCategory(category) {
-  activeCategory = categoryConfig[category] ? category : "";
-  filterProducts();
-  document.getElementById("products").scrollIntoView({ behavior: "smooth", block: "start" });
+  if (pageKey === "new-arrivals") items = items.slice(0, 8);
+  renderProducts(items);
 }
 
 async function loadProducts() {
@@ -816,36 +762,17 @@ async function loadProducts() {
 document.getElementById("search-form").addEventListener("submit", function(event) {
   event.preventDefault();
   filterProducts();
-  document.getElementById("products").scrollIntoView({ behavior: "smooth", block: "start" });
+  document.getElementById("products").scrollIntoView({behavior:"smooth"});
 });
 
 searchInput.addEventListener("input", filterProducts);
 
 document.getElementById("view-all").addEventListener("click", function() {
   searchInput.value = "";
-  activeCategory = "";
   filterProducts();
 });
 
-document.getElementById("clear-product-filter").addEventListener("click", function() {
-  searchInput.value = "";
-  activeCategory = "";
-  filterProducts();
-});
 
-document.querySelectorAll("[data-category]").forEach(function(category) {
-  category.addEventListener("click", function(event) {
-    event.preventDefault();
-    selectProductCategory(category.dataset.category);
-  });
-});
-
-document.querySelectorAll("[data-nav-category]").forEach(function(link) {
-  link.addEventListener("click", function(event) {
-    event.preventDefault();
-    selectProductCategory(link.dataset.navCategory);
-  });
-});
 
 updateCartDisplay();
 loadProducts();
