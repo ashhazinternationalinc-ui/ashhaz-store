@@ -770,6 +770,17 @@ async function loadProducts() {
     const data = await response.json();
     allProducts = Array.isArray(data.products) ? data.products : [];
     filterProducts();
+
+    // Open category pages at the product listing instead of leaving it below the hero.
+    const pageKey = document.body.dataset.categoryPage || "";
+    if (pageKey && pageKey !== "new-arrivals") {
+      requestAnimationFrame(function() {
+        document.getElementById("products").scrollIntoView({
+          behavior: "instant",
+          block: "start"
+        });
+      });
+    }
   } catch (error) {
     console.error("Product loading error:", error);
     showMessage("Products could not be loaded right now. Please refresh later.");
