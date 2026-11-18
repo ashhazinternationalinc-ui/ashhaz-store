@@ -48,36 +48,60 @@ export async function onRequestPatch({ request, env }) {
   return json({ ok: true, message: "Order status updated." });
 }
 
+// Permanently delete an order, its items, and restore the reserved stock.
+// Orders already shipped/delivered or handed to a courier are protected.
 export async function onRequestDelete({ request, env }) {
   if (!(await isAdmin(request, env))) return json({ error: "Admin login required." }, 401);
-  const orderId = Number(new URL(request.url).searchParams.get("id"));
-  if (!Number.isInteger(orderId) || orderId < 1) return json({ error: "Valid order ID required." }, 400);
+
+  const id = Number(new URL(request.url).searchParams.get("id"));
+  if (!Number.isInteger(id) || id < 1) {
+    return json({ error: "Valid order ID is required." }, 400);
+  }
 
   const order = await env.DB.prepare(
-    "SELECT id, order_number, order_status, shipkia_order_id, shipkia_awb, courier_partner, courier_status FROM orders WHERE id = ?"
-  ).bind(orderId).first();
+    `SELECT id, order_number, order_status, shipkia_order_id, shipkia_awb
+     FROM orders WHERE id = ?`
+  ).bind(id).first();
+
   if (!order) return json({ error: "Order not found." }, 404);
-  if (["Shipped", "Delivered"].includes(order.order_status) || order.shipkia_order_id || order.shipkia_awb || order.courier_partner) {
-    return json({ error: "Shipped/delivered or courier-booked orders cannot be deleted. Keep the order record for tracking." }, 409);
+
+  if (["Shipped", "Delivered"].includes(order.order_status) ||
+      order.shipkia_order_id || order.shipkia_awb) {
+    return json({
+      error: "This order is shipped, delivered, or linked to a courier. It cannot be deleted here."
+    }, 409);
   }
 
   const { results: items = [] } = await env.DB.prepare(
-    "SELECT product_id, quantity FROM order_items WHERE order_id = ?"
-  ).bind(orderId).all();
+    `SELECT product_id, SUM(quantity) AS quantity
+     FROM order_items WHERE order_id = ?
+     GROUP BY product_id`
+  ).bind(id).all();
 
-  // Remove dependent records and restore the stock deducted when this order was placed.
+  // D1 batch runs these statements atomically.
   const statements = [];
   for (const item of items) {
-    if (item.product_id && Number(item.quantity) > 0) {
-      statements.push(env.DB.prepare("UPDATE products SET stock = stock + ? WHERE id = ?")
-        .bind(Number(item.quantity), item.product_id));
+    const productId = Number(item.product_id);
+    const quantity = Number(item.quantity);
+    if (Number.isInteger(productId) && productId > 0 &&
+        Number.isInteger(quantity) && quantity > 0) {
+      statements.push(
+        env.DB.prepare("UPDATE products SET stock = stock + ? WHERE id = ?")
+          .bind(quantity, productId)
+      );
     }
   }
-  statements.push(env.DB.prepare("DELETE FROM order_actions WHERE order_id = ?").bind(orderId));
-  statements.push(env.DB.prepare("DELETE FROM order_items WHERE order_id = ?").bind(orderId));
-  statements.push(env.DB.prepare("DELETE FROM orders WHERE id = ?").bind(orderId));
+
+  statements.push(
+    env.DB.prepare("DELETE FROM order_items WHERE order_id = ?").bind(id),
+    env.DB.prepare("DELETE FROM orders WHERE id = ?").bind(id)
+  );
+
   await env.DB.batch(statements);
-  return json({ ok: true, message: `Test order ${order.order_number} deleted. Related stock quantities restored. Any payment/refund is unchanged.` });
+  return json({
+    ok: true,
+    message: `Order ${order.order_number} deleted. Stock quantity restored.`
+  });
 }
 
 export async function onRequestPost({ request, env }) {
