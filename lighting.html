@@ -170,13 +170,62 @@ body[data-category-page] .category-card { background:#ddc994; }
 
 </style>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-/* ASHHAZ category page background refinement */
-<style id="ashhaz-page-background">
-html, body { min-height:100%; }
-body { background:linear-gradient(145deg,#f7f5ef 0%,#eee7d6 52%,#e9dfc6 100%); background-attachment:fixed; }
-main { background:linear-gradient(180deg,rgba(255,255,255,.26),rgba(255,255,255,.08)); }
-.section-heading h2 { color:#292d32; }
-@media (max-width:700px) { body { background-attachment:scroll; } }
+<style id="ashhaz-category-products-first">
+/* CATEGORY PAGE: put the category products directly below the navigation */
+body[data-category-page] {
+  background: linear-gradient(145deg,#f7f3ec 0%,#eee5d6 55%,#f8f5ef 100%) !important;
+  background-attachment: fixed;
+}
+body[data-category-page] .hero,
+body[data-category-page] .benefits,
+body[data-category-page] #categories,
+body[data-category-page] .story-banner {
+  display: none !important;
+}
+body[data-category-page] main {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 28px clamp(14px,3.5vw,48px) 48px;
+  background: transparent;
+}
+body[data-category-page] #products {
+  display: block !important;
+  margin: 0 !important;
+  padding: 28px clamp(12px,2vw,28px) 34px;
+  background: rgba(255,255,255,.82);
+  border: 1px solid #e3d6c2;
+  border-radius: 12px;
+  box-shadow: 0 12px 36px rgba(47,38,25,.07);
+  scroll-margin-top: 12px;
+}
+body[data-category-page] #products .section-heading {
+  margin-bottom: 22px;
+}
+body[data-category-page] #products .section-heading h2 {
+  color: #242930;
+  font-family: Georgia,"Times New Roman",serif;
+  font-size: clamp(28px,3vw,40px);
+}
+body[data-category-page] #products .product-grid {
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: 20px;
+}
+body[data-category-page] #products .product-card {
+  background: #fff;
+  border: 1px solid #e5d8c4;
+  box-shadow: 0 5px 18px rgba(36,41,48,.06);
+}
+body[data-category-page] #products .product-card img {
+  background: #f7f3ec;
+}
+@media(max-width:900px) {
+  body[data-category-page] #products .product-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+}
+@media(max-width:600px) {
+  body[data-category-page] main { padding:16px 10px 32px; }
+  body[data-category-page] #products { padding:20px 10px 24px; border-radius:8px; }
+  body[data-category-page] #products .product-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+}
 </style>
 </head>
 
